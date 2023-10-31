@@ -1,0 +1,8 @@
+﻿  Main.cpp
+C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(6,22): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(7,22): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(8,21): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(9,21): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(14,20): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\Main.cpp(32,17): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+  OpenGL.vcxproj -> C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\Debug\OpenGL.exe
