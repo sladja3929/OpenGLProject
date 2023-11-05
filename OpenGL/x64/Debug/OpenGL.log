@@ -1,0 +1,57 @@
+﻿  main.cpp
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(30,14): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(31,27): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(41,17): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(48,42): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(63,31): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(43,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(49,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(49,49): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(54,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(55,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(55,48): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(60,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(61,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(61,48): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(83,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(99,16): warning C4244: '인수': 'float'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(103,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(104,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(105,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+main.obj : error LNK2019: glewInitmain 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: glutInitWindowSizemain 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: glutInitDisplayModemain 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: glutMainLoopmain 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: glutPostRedisplay"void __cdecl myIdle(void)" (?myIdle@@YAXXZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: glutSwapBuffers"void __cdecl myDisplay(void)" (?myDisplay@@YAXXZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: glutIdleFuncmain 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: glutKeyboardFuncmain 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: glutDisplayFuncmain 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: __glutInitWithExitglutInit_ATEXIT_HACK 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2019: __glutCreateWindowWithExitglutCreateWindow_ATEXIT_HACK 함수에서 참조되는 확인할 수 없는 외부 기호
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewBindBuffer
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewBufferData
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewGenBuffers
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewAttachShader
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewCompileShader
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewCreateProgram
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewCreateShader
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewEnableVertexAttribArray
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewGetAttribLocation
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewGetProgramInfoLog
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewGetProgramiv
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewGetShaderInfoLog
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewGetShaderiv
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewGetUniformLocation
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewLinkProgram
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewShaderSource
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewUniform4f
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewUniformMatrix4fv
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewUseProgram
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewVertexAttribPointer
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewBindVertexArray
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 __glewGenVertexArrays
+main.obj : error LNK2001: 확인할 수 없는 외부 기호 glewExperimental
+C:\cg2\lib\glew_static_vs2010_d.lib : warning LNK4272: 'x86' 라이브러리 컴퓨터 종류가 'x64' 대상 컴퓨터 종류와 충돌합니다.
+C:\cg2\lib\freeglut_static_vs2015_d.lib : warning LNK4272: 'x86' 라이브러리 컴퓨터 종류가 'x64' 대상 컴퓨터 종류와 충돌합니다.
+D:\unity\OpenGLProject\OpenGL\x64\Debug\OpenGL.exe : fatal error LNK1120: 34개의 확인할 수 없는 외부 참조입니다.

@@ -1,8 +1,61 @@
-﻿  Main.cpp
-C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(6,22): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
-C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(7,22): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
-C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(8,21): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
-C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(9,21): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
-C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\MyPlain.h(14,20): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
-C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\Main.cpp(32,17): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
-  OpenGL.vcxproj -> C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\Debug\OpenGL.exe
+﻿  main.cpp
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(30,14): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(31,27): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(41,17): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(48,42): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(63,31): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(43,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(49,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(49,49): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(54,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(55,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(55,48): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(60,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(61,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(61,48): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(83,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(99,16): warning C4244: '인수': 'float'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(103,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(104,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(105,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  LINK : D:\unity\OpenGLProject\OpenGL\Debug\OpenGL.exe을(를) 찾을 수 없거나 마지막 증분 링크에 의해 빌드되지 않았습니다. 전체 링크를 수행하고 있습니다.
+glew_static_vs2010_d.lib(glew.obj) : warning LNK4099: 'vc100.pdb' PDB를 'glew_static_vs2010_d.lib(glew.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\vc100.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_callbacks.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_callbacks.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_cursor.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_cursor.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_display.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_display.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_ext.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_ext.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_font_data.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_font_data.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_gamemode.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_gamemode.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_geometry.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_geometry.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_gl2.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_gl2.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_init.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_init.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_input_devices.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_input_devices.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_joystick.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_joystick.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_main.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_main.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_misc.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_misc.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_overlay.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_overlay.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_spaceball.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_spaceball.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_state.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_state.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_stroke_mono_roman.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_stroke_mono_roman.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_stroke_roman.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_stroke_roman.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_structure.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_structure.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_teapot.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_teapot.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_videoresize.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_videoresize.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_window.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_window.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_font.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_font.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_menu.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_menu.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_cursor_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_cursor_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_display_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_display_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_ext_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_ext_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_gamemode_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_gamemode_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_init_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_init_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_input_devices_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_input_devices_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_joystick_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_joystick_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_main_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_main_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_menu_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_menu_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_spaceball_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_spaceball_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_state_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_state_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_structure_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_structure_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_window_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_window_mswin.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(xparsegeometry_repl.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(xparsegeometry_repl.obj)' 또는 'D:\unity\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+  OpenGL.vcxproj -> D:\unity\OpenGLProject\OpenGL\Debug\OpenGL.exe

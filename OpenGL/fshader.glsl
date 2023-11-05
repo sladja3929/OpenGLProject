@@ -1,15 +1,10 @@
-#version 330
+#version 330 
 
-in vec4 color;
-in vec4 position;
+in  vec4 color;
+out vec4 FragColor;
 
-out vec4 fColor;
-
-void main()
+void
+main()
 {
-	vec4 c = color;
-
-	c = mix(c, vec4(1, 0.5, 0, 1), position.z / -0.3);
-
-	fColor = c;
+	FragColor = color;
 }

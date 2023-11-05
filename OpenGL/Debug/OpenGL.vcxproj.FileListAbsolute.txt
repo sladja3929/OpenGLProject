@@ -1,1 +1,2 @@
 C:\Users\나원준\Desktop\프로그래밍\컴퓨터그래픽스\OpenGL\Debug\OpenGL.exe
+D:\unity\OpenGLProject\OpenGL\Debug\OpenGL.exe
