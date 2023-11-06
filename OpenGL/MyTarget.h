@@ -21,7 +21,7 @@ public:
 	vec3 GetPosition(float g_time);
 	
 	void toggleRandom() {bRandom = !bRandom;};
-	
+	void Check(GLuint program, mat4 CTM, vec4 p);
 };
 
 MyTarget::MyTarget(MyCube * in)
@@ -65,4 +65,14 @@ void MyTarget::Draw(GLuint program, mat4 CTM, float g_time)
 	GLuint uMat = glGetUniformLocation(program, "uMat");
 	glUniformMatrix4fv(uMat, 1, true, CTM*T*M);
 	pCube->Draw(program);			
+}
+
+void MyTarget::Check(GLuint program, mat4 CTM, vec4 p)
+{
+	mat4 T = Translate(p.x, p.y, 0);
+	mat4 M = Scale(0.08, 0.08, 0.08);
+
+	GLuint uMat = glGetUniformLocation(program, "uMat");
+	glUniformMatrix4fv(uMat, 1, true, CTM * T * M);
+	pCube->Draw(program);
 }
