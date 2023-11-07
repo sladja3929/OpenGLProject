@@ -102,7 +102,7 @@ float findTheta(vec3 t, vec3 e, vec3 j)
 
 	//std::cout << theta * 180 / 3.141592 << std::endl;
 
-	if (dot(je, jt) > 0) return theta * 180 / 3.141592;
+	if (cross(je, jt).z > 0) return theta * 180 / 3.141592;
 	else return theta * -180 / 3.141592;
 }
 
@@ -141,13 +141,15 @@ void computeAngle()
 	if (targetAng < ang1 + ang2 + ang3) i = -1.0;
 	ang3 = targetAng - ang1 - ang2;*/
 
-	std::cout << findTheta(targetPos, endPoint, joint2) << std::endl;
+	//std::cout << findTheta(targetPos, endPoint, joint1) << std::endl;
 
 	float theta3 = findTheta(targetPos, endPoint, joint2);
 	float theta2 = findTheta(targetPos, endPoint, joint1);
 	float theta1 = findTheta(targetPos, endPoint, vec3(0));
 
-	
+	if (theta3 != 0) ang3 += theta3 / 5;
+	if (theta3 != 0) ang2 += theta2 / 5;
+	if (theta3 != 0) ang1 += theta1 / 5;
 }
 
 
