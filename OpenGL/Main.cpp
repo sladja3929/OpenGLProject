@@ -89,67 +89,38 @@ void drawRobotArm(float ang1, float ang2, float ang3)
 	CTM = temp;
 }
 
-vec3 joint2;
-vec3 joint1;
-vec3 endPoint;
-
 float findTheta(vec3 t, vec3 e, vec3 j)
 {
 	vec3 jt = t - j;
 	vec3 je = e - j;
 
-	float theta = acos(dot(je, jt) / (length(je) * length(jt)));
+	float theta = 0;
+	float tmp = dot(je, jt) / (length(je) * length(jt));
+	if(tmp <=1 && tmp >= -1) theta = acos(tmp);
 
-	//std::cout << theta * 180 / 3.141592 << std::endl;
-
-	if (cross(je, jt).z > 0) return theta * 180 / 3.141592;
-	else return theta * -180 / 3.141592;
+	return (cross(je, jt).z > 0) ? theta * 180 / 3.141592 : theta * -180 / 3.141592;
 }
 
 void computeAngle()
 {
 	vec3 targetPos = target.GetPosition(g_time);
-	float targetAng = atan2(targetPos.x, targetPos.y) * -180 / 3.141592;
 
-	vec4 _endPoint = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * RotateZ(ang3) * Translate(-0.2, 0, 0) * vec4(0, 0, 0, 1);
-	endPoint.x = _endPoint.x;	endPoint.y = _endPoint.y; endPoint.z = 0;
-	float dist1 = length(endPoint - targetPos);
-
-	std::stack<vec3> stack;
-
-	vec4 _joint2 = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
-	joint2.x = _joint2.x;	joint2.y = _joint2.y; joint2.z = 0;
-	stack.push(joint2);
-	float dist2 = length(joint2 - targetPos);
+	vec3 joint1;
+	vec3 joint2;	
+	vec3 endPoint;
 
 	vec4 _joint1 = RotateZ(ang1) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
 	joint1.x = _joint1.x;	joint1.y = _joint1.y; joint1.z = 0;
-	stack.push(joint1);
-	float dist3 = length(joint1 - targetPos);
 
-	stack.push(vec3(0));
+	vec4 _joint2 = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
+	joint2.x = _joint2.x;	joint2.y = _joint2.y; joint2.z = 0;
 
-	/*float i = 1;
-	if (targetAng < ang1) i = -1.0;
-	ang1 += dist1 * i * 5;
+	vec4 _endPoint = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * RotateZ(ang3) * Translate(-0.2, 0, 0) * vec4(0, 0, 0, 1);
+	endPoint.x = _endPoint.x;	endPoint.y = _endPoint.y; endPoint.z = 0;
 
-	i = 1;
-	if (targetAng < ang1 + ang2) i = -1.0;
-	ang2 += dist1 * i * 5;
-
-	i = 1;
-	if (targetAng < ang1 + ang2 + ang3) i = -1.0;
-	ang3 = targetAng - ang1 - ang2;*/
-
-	//std::cout << findTheta(targetPos, endPoint, joint1) << std::endl;
-
-	float theta3 = findTheta(targetPos, endPoint, joint2);
-	float theta2 = findTheta(targetPos, endPoint, joint1);
-	float theta1 = findTheta(targetPos, endPoint, vec3(0));
-
-	if (theta3 != 0) ang3 += theta3 / 5;
-	if (theta3 != 0) ang2 += theta2 / 5;
-	if (theta3 != 0) ang1 += theta1 / 5;
+	ang3 += findTheta(targetPos, endPoint, joint2) / 3;
+	ang2 += findTheta(targetPos, endPoint, joint1) / 3;
+	ang1 += findTheta(targetPos, endPoint, vec3(0)) / 3;
 }
 
 
@@ -162,19 +133,11 @@ void myDisplay()
 
 	
 	uMat = glGetUniformLocation(program, "uMat");
-	CTM = Translate(0, -0.4, 0);// *RotateY(g_time * 30);
-	drawRobotArm(ang1, ang2, ang3);	
-	
+	CTM = Translate(0, -0.4, 0) * RotateY(g_time * 30);
+	drawRobotArm(ang1, ang2, ang3);		
 
 	glUniform4f(uColor, 1,0,0,1);
-	if (bDrawTarget == true)
-	{
-		target.Draw(program, CTM, g_time);
-		//target.Check(program, CTM, endPoint);
-		//target.Check(program, CTM, joint1);
-		//target.Check(program, CTM, joint2);
-	}
-		
+	if (bDrawTarget == true) target.Draw(program, CTM, g_time);		
 	
 	glutSwapBuffers();
 }

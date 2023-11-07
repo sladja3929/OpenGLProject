@@ -1,36 +1,33 @@
 ﻿  main.cpp
-C:\Github\OpenGLProject\OpenGL\MyTarget.h(30,14): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\MyTarget.h(31,27): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\MyTarget.h(41,17): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\MyTarget.h(48,42): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\MyTarget.h(63,31): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\MyTarget.h(73,33): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(44,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(48,51): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(52,52): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(59,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(59,49): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(64,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(66,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(70,29): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(70,53): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(74,30): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(74,54): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(79,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(81,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(85,47): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(105,46): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(106,27): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(112,18): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(114,54): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(114,93): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(114,133): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(120,52): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(120,91): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(125,52): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(165,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(187,16): warning C4244: '인수': 'float'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(191,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(192,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(193,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  OpenGL.vcxproj -> C:\Github\OpenGLProject\OpenGL\Debug\OpenGL.exe
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(29,14): warning C4305: '=': 'double'에서 'float'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(30,27): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(40,17): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(47,42): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\MyTarget.h(62,31): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(44,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(48,51): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(52,52): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(59,25): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(59,49): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(64,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(66,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(70,29): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(70,53): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(74,30): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(74,54): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(79,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(81,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(85,47): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(101,26): warning C4244: 'return': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(112,52): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(115,52): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(115,91): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(118,54): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(118,93): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(118,133): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(136,28): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(150,16): warning C4244: '인수': 'float'에서 'DWORD'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(154,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(155,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+D:\unity\OpenGLProject\OpenGL\main.cpp(156,14): warning C4244: '=': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+  OpenGL.vcxproj -> D:\unity\OpenGLProject\OpenGL\Debug\OpenGL.exe
