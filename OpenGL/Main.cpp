@@ -1,7 +1,7 @@
 #include <vgl.h>
 #include <InitShader.h>
 #include <mat.h>
-#include <list>
+#include <stack>
 #include "MyCube.h"
 #include "MyPyramid.h"
 #include "MyTarget.h"
@@ -37,8 +37,6 @@ float g_time = 0;
 void drawRobotArm(float ang1, float ang2, float ang3)
 {
 	mat4 temp = CTM;
-	std::list<mat4> stack;	
-	stack.push_back(CTM);
 
 	// BASE
 	mat4 M(1.0);
@@ -91,27 +89,47 @@ void drawRobotArm(float ang1, float ang2, float ang3)
 	CTM = temp;
 }
 
-vec4 joint1;
-vec4 joint2;
-vec4 hand;
+vec3 joint2;
+vec3 joint1;
+vec3 endPoint;
+
+float findTheta(vec3 t, vec3 e, vec3 j)
+{
+	vec3 jt = t - j;
+	vec3 je = e - j;
+
+	float theta = acos(dot(je, jt) / (length(je) * length(jt)));
+
+	//std::cout << theta * 180 / 3.141592 << std::endl;
+
+	if (dot(je, jt) > 0) return theta * 180 / 3.141592;
+	else return theta * -180 / 3.141592;
+}
 
 void computeAngle()
 {
 	vec3 targetPos = target.GetPosition(g_time);
 	float targetAng = atan2(targetPos.x, targetPos.y) * -180 / 3.141592;
 
-	hand = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * RotateZ(ang3) * Translate(-0.2, 0, 0) * vec4(0, 0, 0, 1);
-	float dist1 = length(hand - targetPos);
+	vec4 _endPoint = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * RotateZ(ang3) * Translate(-0.2, 0, 0) * vec4(0, 0, 0, 1);
+	endPoint.x = _endPoint.x;	endPoint.y = _endPoint.y; endPoint.z = 0;
+	float dist1 = length(endPoint - targetPos);
 
-	joint1 = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
-	float dist2 = length(joint1 - targetPos);
+	std::stack<vec3> stack;
 
-	joint2 = RotateZ(ang1) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
-	float dist3 = length(joint2 - targetPos);
+	vec4 _joint2 = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
+	joint2.x = _joint2.x;	joint2.y = _joint2.y; joint2.z = 0;
+	stack.push(joint2);
+	float dist2 = length(joint2 - targetPos);
 
-	std::cout << targetAng << std::endl;
+	vec4 _joint1 = RotateZ(ang1) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
+	joint1.x = _joint1.x;	joint1.y = _joint1.y; joint1.z = 0;
+	stack.push(joint1);
+	float dist3 = length(joint1 - targetPos);
 
-	float i = 1;
+	stack.push(vec3(0));
+
+	/*float i = 1;
 	if (targetAng < ang1) i = -1.0;
 	ang1 += dist1 * i * 5;
 
@@ -121,7 +139,15 @@ void computeAngle()
 
 	i = 1;
 	if (targetAng < ang1 + ang2 + ang3) i = -1.0;
-	ang3 = targetAng - ang1 - ang2;
+	ang3 = targetAng - ang1 - ang2;*/
+
+	std::cout << findTheta(targetPos, endPoint, joint2) << std::endl;
+
+	float theta3 = findTheta(targetPos, endPoint, joint2);
+	float theta2 = findTheta(targetPos, endPoint, joint1);
+	float theta1 = findTheta(targetPos, endPoint, vec3(0));
+
+	
 }
 
 
@@ -142,7 +168,7 @@ void myDisplay()
 	if (bDrawTarget == true)
 	{
 		target.Draw(program, CTM, g_time);
-		//target.Check(program, CTM, hand);
+		//target.Check(program, CTM, endPoint);
 		//target.Check(program, CTM, joint1);
 		//target.Check(program, CTM, joint2);
 	}
