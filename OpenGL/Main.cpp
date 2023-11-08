@@ -3,150 +3,124 @@
 #include <mat.h>
 #include "MyCube.h"
 #include "MyPyramid.h"
-#include "MyTarget.h"
 
 MyCube cube;
 MyPyramid pyramid;
-MyTarget target(&cube);
 
 GLuint program;
 GLuint uMat;
 
-mat4 CTM;
+mat4 g_Mat = mat4(1.0);
 
-bool bPlay = false;
-bool bChasingTarget= false;
-bool bDrawTarget = false;
-
-float ang1 = 0;
-float ang2 = 0;
-float ang3 = 0;
+float g_aspect = 1.0f;
+float g_size = 4.0f;
 
 void myInit()
 {
 	cube.Init();
-	pyramid.Init();	
+	pyramid.Init();
 
 	program = InitShader("vshader.glsl", "fshader.glsl");
 	glUseProgram(program);
 }
 
+mat4 myLookAt(vec3 e, vec3 f, vec3 u)
+{
+	vec3 n = normalize(f - e);			// -Cz direction
+	u = normalize(u);
+	vec3 a = dot(u, n) * n;
+	vec3 v = normalize(u - a);			// Cy direction
+	vec3 w = normalize(cross(v, -n));	// Cx direction
+
+	mat4 Rw(1.0f);
+	Rw[0][0] = w.x;		Rw[0][1] = v.x;		Rw[0][2] = -n.x;
+	Rw[1][0] = w.y;		Rw[1][1] = v.y;		Rw[1][2] = -n.y;
+	Rw[2][0] = w.z;		Rw[2][1] = v.z;		Rw[2][2] = -n.z;
+
+	mat4 Rc(1.0f);
+	Rc[0][0] = w.x;		Rc[0][1] = w.y;		Rc[0][2] = w.z;
+	Rc[1][0] = v.x;		Rc[1][1] = v.y;		Rc[1][2] = v.z;
+	Rc[2][0] =-n.x;		Rc[2][1] =-n.y;		Rc[2][2] =-n.z;
+
+	mat4 Tc = Translate(-e.x, -e.y, -e.z);
+//	mat4 Rc = transpose(Rw);
+
+	mat4 out = Rc * Tc;
+	return out;
+
+}
+
+mat4 myOrtho(float l, float r, float b, float t, float n, float f)
+{
+	float cx = (l + r) / 2.0f;
+	float cy = (b + t) / 2.0f;
+	float cz = (-n + -f) / 2.0f;
+
+	mat4 T = Translate(-cx, -cy, -cz);
+
+	float sx = 2.0f / (r - l);
+	float sy = 2.0f / (t - b);
+	float sz = 2.0f / (-n - (-f));
+
+	mat4 S = Scale(sx, sy, sz);
+
+	return S * T;
+}
+
 float g_time = 0;
-
-void drawRobotArm(float ang1, float ang2, float ang3)
-{
-	mat4 temp = CTM;
-	
-	// BASE
-	mat4 M(1.0);
-
-	M = Scale(0.3, 0.2, 0.3);
-	glUniformMatrix4fv(uMat, 1, true, CTM*M);
-	pyramid.Draw(program);
-
-	// Upper Arm
-	CTM *= RotateZ(ang1);
-	M = Translate(0, 0.2, 0) *  Scale(0.1, 0.4, 0.1);
-	glUniformMatrix4fv(uMat, 1, true, CTM*M);
-	cube.Draw(program);
-
-	// Lower Arm
-	CTM *= Translate(0, 0.4, 0) * RotateZ(ang2);
-	M = Translate(0, 0.2, 0) * Scale(0.1, 0.4, 0.1);
-	glUniformMatrix4fv(uMat, 1, true, CTM*M);
-	cube.Draw(program);
-	
-	// Hand
-	CTM *= Translate(0, 0.4, 0)	* RotateZ(ang3);
-	M = Translate(0, 0.1, 0) * Scale(0.3, 0.2, 0.1);
-	glUniformMatrix4fv(uMat, 1, true, CTM*M);
-	cube.Draw(program);
-
-	CTM = temp;
-}
-
-void computeAngle()
-{
-		
-}
-
 
 void myDisplay()
 {
+	glClearColor(0.5, 0.5, 0.5, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
-	GLuint uColor = glGetUniformLocation(program, "uColor");
-	glUniform4f(uColor, -1,-1,-1,-1);
 
-	
-	uMat = glGetUniformLocation(program, "uMat");
-	CTM = Translate(0, -0.4, 0) * RotateY(g_time*30);
-	drawRobotArm(ang1, ang2, ang3);	
-	
+	GLuint uMat = glGetUniformLocation(program, "uMat");
+		
+	vec3 eye = vec3(3*cos(g_time*3.141592 / 2), 3+3*sin(g_time*3.141592/4) ,3*sin(g_time * 3.141592 / 2));
+	vec3 at = vec3(0,0,0);
+	vec3 up = vec3(0,1,0);
 
-	glUniform4f(uColor, 1,0,0,1);
-	if(bDrawTarget == true)
-		target.Draw(program, CTM, g_time);
-	
+	mat4 ViewM = myLookAt(eye, at, up);// view matrix
+	//mat4 ProjM = myOrtho(left, right, top, bottom, near, far) -> 양자화 (Quantization)
+	//aspect ratio (종횡비): w / h
+	mat4 ProjM = myOrtho(-g_size / 2 * g_aspect, g_size / 2 * g_aspect, -g_size / 2, g_size / 2, 1, 10);
+
+	mat4 M(1.0);
+	mat4 CTM(1.0);	// current transform matrix
+
+	glUniformMatrix4fv(uMat, 1, true, ProjM*ViewM*CTM*M);
+	cube.Draw(program);
+
 	glutSwapBuffers();
 }
 
 void myIdle()
 {
-	if(bPlay)
-	{
-		g_time += 1/60.0f;
-		Sleep(1/60.0f*1000);
-
-		if(bChasingTarget == false)
-		{
-			ang1 = 45 * sin(g_time*3.141592);
-			ang2 = 60 * sin(g_time*2*3.141592);
-			ang3 = 30 * sin(g_time*3.141592);
-		}
-		else
-			computeAngle();
-
-		glutPostRedisplay();
-	}
+	g_time += 0.016f;
+	Sleep(16);
+	glutPostRedisplay();
 }
 
-void myKeyboard(unsigned char c, int x, int y)
+void myReshape(int w, int h)
 {
-
-	switch(c)
-	{
-	case '1':
-		bChasingTarget = !bChasingTarget;
-		break;
-	case '2':
-		bDrawTarget = !bDrawTarget;
-		break;
-	case '3':
-		target.toggleRandom();
-		break;
-	case ' ':
-		bPlay = !bPlay;
-		break;
-	default:
-		break;
-	}
+	g_aspect = (float)w / (float)h;
+	glViewport(0, 0, w/2, h/2); //시작점, 가로, 세로
 }
-
 
 int main(int argc, char ** argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA|GLUT_DEPTH);
 	glutInitWindowSize(500,500);
-	glutCreateWindow("Simple Robot Arm");
+	glutCreateWindow("Cube and Pyramid");
 
 	glewExperimental = true;
 	glewInit();
 
 	myInit();
 	glutDisplayFunc(myDisplay);
-	glutKeyboardFunc(myKeyboard);
+	glutReshapeFunc(myReshape);
 	glutIdleFunc(myIdle);
 
 	glutMainLoop();

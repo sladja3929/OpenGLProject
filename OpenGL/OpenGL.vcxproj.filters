@@ -28,13 +28,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MyPyramid.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MyTarget.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="MyCube.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPyramid.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

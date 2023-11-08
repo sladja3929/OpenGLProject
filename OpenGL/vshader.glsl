@@ -5,14 +5,11 @@ in  vec4 vColor;
 out vec4 color;
 
 uniform mat4 uMat;
-uniform vec4 uColor;
 
 void main()
 {
 	gl_Position  = uMat*vPosition;
+	gl_Position *= vec4(1,1,-0.1,1);
 
-	if(uColor.r<0)
-		color = vColor;
-	else
-		color = uColor;
+    color = vColor;
 }
