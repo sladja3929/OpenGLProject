@@ -19,15 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fshader.glsl" />
-    <None Include="vshader.glsl" />
+    <None Include="..\..\..\Users\sladj\Desktop\PerspectivePractice\fshader.glsl" />
+    <None Include="..\..\..\Users\sladj\Desktop\PerspectivePractice\vshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MyCube.h" />
-    <ClInclude Include="MyPyramid.h" />
+    <ClInclude Include="..\..\..\Users\sladj\Desktop\PerspectivePractice\MyCube.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
