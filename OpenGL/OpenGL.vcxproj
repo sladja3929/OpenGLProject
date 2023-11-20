@@ -26,9 +26,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="maze.txt" />
+    <Text Include="maze2.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="MyCube.h" />
-    <ClInclude Include="MyPyramid.h" />
-    <ClInclude Include="MyTarget.h" />
+    <ClInclude Include="MyUtil.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

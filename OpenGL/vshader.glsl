@@ -10,9 +10,10 @@ uniform vec4 uColor;
 void main()
 {
 	gl_Position  = uMat*vPosition;
-
-	if(uColor.r<0)
+	gl_Position *= vec4(1,1,-1,1);	// z축 방향이 반대임
+    
+	if(uColor.w<1)
 		color = vColor;
-	else
+	else 
 		color = uColor;
 }

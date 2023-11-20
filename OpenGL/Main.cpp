@@ -1,205 +1,398 @@
+
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <vgl.h>
 #include <InitShader.h>
-#include <mat.h>
-#include <stack>
 #include "MyCube.h"
-#include "MyPyramid.h"
-#include "MyTarget.h"
+#include "MyUtil.h"
+
+#include <vec.h>
+#include <mat.h>
+
+#define MAZE_FILE	"maze2.txt"
+
+#include <iostream>
+#include <queue>
+#include <vector>
 
 MyCube cube;
-MyPyramid pyramid;
-MyTarget target(&cube);
-
 GLuint program;
+
+mat4 g_Mat = mat4(1.0f);
 GLuint uMat;
+GLuint uColor;
 
-mat4 CTM;
+float wWidth = 1000;
+float wHeight = 500;
 
-bool bPlay = false;
-bool bChasingTarget= false;
-bool bDrawTarget = false;
+vec3 cameraPos = vec3(0, 0, 0);
+vec3 viewDirection = vec3(0, 0, -1);
+std::pair<int, int> camera_idx;
 
-float ang1 = 0;
-float ang2 = 0;
-float ang3 = 0;
+vec3 goalPos = vec3(0, 0, 0);
+std::pair<int, int> goal_idx;
 
-void myInit()
-{
-	cube.Init();
-	pyramid.Init();	
+int MazeSize;
+char maze[255][255] = { 0 };
 
-	program = InitShader("vshader.glsl", "fshader.glsl");
-	glUseProgram(program);
-}
+float cameraSpeed = 0.1;
+
+int cameraRotateSpeed = 5;
+int cameraAngle = 0;
 
 float g_time = 0;
 
-void drawRobotArm(float ang1, float ang2, float ang3)
+bool isWall = false;
+bool isHint = false;
+bool isTrace = false;
+std::vector<std::pair<int, int>> traceLine;
+
+struct Node
 {
-	mat4 temp = CTM;
+	int x, z, g, h;
 
-	// BASE
-	mat4 M(1.0);
+	Node(int x, int z, int g, int h) : x(x), z(z), g(g), h(h) {}
 
-	M = Scale(0.05, 0.05, 0.34);
-	glUniformMatrix4fv(uMat, 1, true, CTM * M);
-	cube.Draw(program);
+	bool operator<(const Node& other) const
+	{
+		return (g + h) > (other.g + other.h);
+	}
+};
 
-	M = Translate(0, 0, 0.125) * Scale(0.3, 0.3, 0.05);
-	glUniformMatrix4fv(uMat, 1, true, CTM*M);
-	pyramid.Draw(program);
+void AStar()
+{
+	bool visited[255][255] = { false, };
+	std::pair<int, int> prev[255][255];
+	std::priority_queue<Node> pq;
+	traceLine.clear();
 
-	M = Translate(0, 0, -0.125) * Scale(0.3, 0.3, 0.05);
-	glUniformMatrix4fv(uMat, 1, true, CTM * M);
-	pyramid.Draw(program);
+	pq.push(Node(camera_idx.first, camera_idx.second, 0, 0));
+	prev[camera_idx.first][camera_idx.second] = std::make_pair(-1, -1);
+	
+	while (!pq.empty())
+	{
+		Node cur = pq.top();
+		pq.pop();
 
-	// Upper Arm
-	CTM *= RotateZ(ang1);
+		if (cur.x == goal_idx.first && cur.z == goal_idx.second)
+		{
+			int x = goal_idx.first;
+			int z = goal_idx.second;
 
-	M = Translate(0, 0.2, 0) *  Scale(0.1, 0.5, 0.1);
-	glUniformMatrix4fv(uMat, 1, true, CTM*M);
-	cube.Draw(program);
+			while(prev[x][z].first != -1)
+			{
+				traceLine.push_back(std::make_pair(x, z));
+				int tmp = x;
+				x = prev[tmp][z].first;
+				z = prev[tmp][z].second;
+			}
 
-	// Lower Arm
-	CTM *= Translate(0, 0.4, 0) * RotateZ(ang2);
+			traceLine.push_back(std::make_pair(x, z));
+			reverse(traceLine.begin(), traceLine.end());
+			return;
+		}
 
-	M = Scale(0.05, 0.05, 0.24);
-	glUniformMatrix4fv(uMat, 1, true, CTM * M);
-	cube.Draw(program);
+		visited[cur.x][cur.z] = true;
+		
+		int dir[4][2] = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
+		for (int i = 0; i < 4; i++)
+		{
+			int nextX = cur.x + dir[i][0];
+			int nextZ = cur.z + dir[i][1];
 
-	M = Translate(0, 0.2, 0.075) * Scale(0.1, 0.5, 0.05);
-	glUniformMatrix4fv(uMat, 1, true, CTM*M);
-	cube.Draw(program);
+			if (maze[nextX][nextZ] != '*' && !visited[nextX][nextZ])
+			{
+				int nextG = cur.g + 1;
+				int nextH = sqrt(pow(nextX - goal_idx.first, 2) + pow(nextZ - goal_idx.second, 2));
+				
+				pq.push(Node(nextX, nextZ, nextG, nextH));
 
-	M = Translate(0, 0.2, -0.075) * Scale(0.1, 0.5, 0.05);
-	glUniformMatrix4fv(uMat, 1, true, CTM * M);
+				prev[nextX][nextZ] = std::make_pair(cur.x, cur.z);
+			}
+		}
+	}
+}
+
+inline vec3 getPositionFromIndex(int i, int j)
+{
+	float unit = 1;
+	vec3 leftTopPosition = vec3(-MazeSize / 2.0 + unit / 2, 0, -MazeSize / 2.0 + unit / 2);
+	vec3 xDir = vec3(1, 0, 0);
+	vec3 zDir = vec3(0, 0, 1);
+	return leftTopPosition + i * xDir + j * zDir;
+}
+
+inline void getCameraIndex()
+{
+	camera_idx.first = (cameraPos.x + MazeSize / 2) / 1;
+	camera_idx.second = (cameraPos.z + MazeSize / 2) / 1;
+}
+
+void LoadMaze()
+{
+	FILE* file = fopen(MAZE_FILE, "r");
+	char buf[255];
+	fgets(buf, 255, file);
+	sscanf(buf, "%d", &MazeSize);
+	for (int j = 0; j < MazeSize; j++)
+	{
+		fgets(buf, 255, file);
+		for (int i = 0; i < MazeSize; i++)
+		{
+			maze[i][j] = buf[i];
+			if (maze[i][j] == 'C')				// Setup Camera Position
+			{				
+				cameraPos = getPositionFromIndex(i, j);
+				camera_idx.first = i;
+				camera_idx.second = j;
+			}
+			if (maze[i][j] == 'G')				// Setup Goal Position
+			{
+				goalPos = getPositionFromIndex(i, j);
+				goal_idx.first = i;
+				goal_idx.second = j;
+			}
+		}
+	}
+	fclose(file);
+}
+
+void DrawMaze()
+{
+	for (int j = 0; j < MazeSize; j++)
+		for (int i = 0; i < MazeSize; i++)
+			if (maze[i][j] == '*')
+			{
+				vec3 blockPos = getPositionFromIndex(i, j);
+				vec3 color;
+
+				if (length(blockPos - cameraPos) < 0.8)
+				{
+					isWall = true;
+					cameraPos -= (blockPos - cameraPos) * cameraSpeed;
+					color = vec3(255, 0, 0);					
+				}
+
+				else
+				{
+					isWall = false;
+					color = vec3(i / (float)MazeSize, j / (float)MazeSize, 1);
+				}
+
+				mat4 ModelMat = Translate(blockPos);
+				glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
+				glUniform4f(uColor, color.x, color.y, color.z, 1);
+				cube.Draw(program);
+			}
+}
+
+void myInit()
+{
+	LoadMaze();
+	cube.Init();
+	program = InitShader("vshader.glsl", "fshader.glsl");
+}
+
+void DrawGrid()
+{
+	float n = 40;
+	float w = MazeSize;
+	float h = MazeSize;
+
+	for (int i = 0; i < n; i++)
+	{
+		mat4 m = Translate(0, -0.5, -h / 2 + h / n * i) * Scale(w, 0.02, 0.02);
+		glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * m);
+		glUniform4f(uColor, 1, 1, 1, 1);
+		cube.Draw(program);
+	}
+	for (int i = 0; i < n; i++)
+	{
+		mat4 m = Translate(-w / 2 + w / n * i, -0.5, 0) * Scale(0.02, 0.02, h);
+		glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * m);
+		glUniform4f(uColor, 1, 1, 1, 1);
+		cube.Draw(program);
+	}
+
+	if (isHint && !traceLine.empty())
+	{
+		for (int i = 0; i < traceLine.size() - 1; i++)
+		{
+			vec3 prev = getPositionFromIndex(traceLine[i].first, traceLine[i].second);
+			vec3 next = getPositionFromIndex(traceLine[i + 1].first, traceLine[i + 1].second);
+			mat4 m;
+			if(prev.x == next.x) m = Translate(prev)* Scale(0.1, 0.1, 0.4);
+			else m = Translate(prev) * Scale(0.4, 0.1, 0.1);
+			glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * m);
+			glUniform4f(uColor, 1, 0, 0, 1);
+			cube.Draw(program);
+		}
+	}
+}
+
+void drawCamera()
+{
+	float cameraSize = 0.5;
+	
+	mat4 ModelMat = Translate(cameraPos) * RotateY(cameraAngle) * Scale(vec3(cameraSize));
+	glUseProgram(program);
+	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
+	glUniform4f(uColor, 0, 1, 0, 1);
 	cube.Draw(program);
 	
-	// Hand
-	CTM *= Translate(0, 0.4, 0)	* RotateZ(ang3);
+	ModelMat = Translate(cameraPos + viewDirection * cameraSize / 2) * RotateY(cameraAngle) * Scale(vec3(cameraSize / 2));
+	glUseProgram(program);
+	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
+	glUniform4f(uColor, 0, 1, 0, 1);
+	cube.Draw(program);
+}
 
-	M = Scale(0.05, 0.05, 0.24);
-	glUniformMatrix4fv(uMat, 1, true, CTM * M);
+void drawGoal()
+{
+	glUseProgram(program);
+	float GoalSize = 0.7;
+
+	mat4 ModelMat = Translate(goalPos) * RotateY(g_time * 3) * Scale(vec3(GoalSize));
+	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
+	glUniform4f(uColor, 0, 0, 0, 0);
 	cube.Draw(program);
 
-	M = Translate(0, 0, 0) * Scale(0.4, 0.15, 0.1);
-	glUniformMatrix4fv(uMat, 1, true, CTM*M);
+	ModelMat = Translate(goalPos) * RotateY(g_time * 3 + 45) * Scale(vec3(GoalSize));
+	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
+	glUniform4f(uColor, 0, 0, 0, 0);
 	cube.Draw(program);
-
-	CTM = temp;
-}
-
-float findTheta(vec3 t, vec3 e, vec3 j)
-{
-	vec3 jt = t - j;
-	vec3 je = e - j;
-
-	float theta = 0;
-	float tmp = dot(je, jt) / (length(je) * length(jt));
-	if(tmp <=1 && tmp >= -1) theta = acos(tmp);
-
-	return (cross(je, jt).z > 0) ? theta * 180 / 3.141592 : theta * -180 / 3.141592;
-}
-
-void computeAngle()
-{
-	vec3 targetPos = target.GetPosition(g_time);
-
-	vec3 joint1;
-	vec3 joint2;	
-	vec3 endPoint;
-
-	vec4 _joint1 = RotateZ(ang1) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
-	joint1.x = _joint1.x;	joint1.y = _joint1.y; joint1.z = 0;
-
-	vec4 _joint2 = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * vec4(0, 0, 0, 1);
-	joint2.x = _joint2.x;	joint2.y = _joint2.y; joint2.z = 0;
-
-	vec4 _endPoint = RotateZ(ang1) * Translate(0, 0.4, 0) * RotateZ(ang2) * Translate(0, 0.4, 0) * RotateZ(ang3) * Translate(-0.2, 0, 0) * vec4(0, 0, 0, 1);
-	endPoint.x = _endPoint.x;	endPoint.y = _endPoint.y; endPoint.z = 0;
-
-	ang3 += findTheta(targetPos, endPoint, joint2) / 3;
-	ang2 += findTheta(targetPos, endPoint, joint1) / 3;
-	ang1 += findTheta(targetPos, endPoint, vec3(0)) / 3;
 }
 
 
-void myDisplay()
+void drawScene(bool bDrawCamera = true)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
-	GLuint uColor = glGetUniformLocation(program, "uColor");
-	glUniform4f(uColor, -1,-1,-1,-1);
-
-	
+	glUseProgram(program);
 	uMat = glGetUniformLocation(program, "uMat");
-	CTM = Translate(0, -0.4, 0) * RotateY(g_time * 30);
-	drawRobotArm(ang1, ang2, ang3);		
+	uColor = glGetUniformLocation(program, "uColor");
 
-	glUniform4f(uColor, 1,0,0,1);
-	if (bDrawTarget == true) target.Draw(program, CTM, g_time);		
-	
+	DrawGrid();
+	DrawMaze();
+	drawGoal();
+
+	if (bDrawCamera)
+		drawCamera();
+
+
+
+}
+
+void display()
+{
+	glEnable(GL_DEPTH_TEST);
+
+	float vWidth = wWidth / 2;
+	float vHeight = wHeight;
+
+	// LEFT SCREEN : View From Camera (Perspective Projection)
+	glViewport(0, 0, vWidth, vHeight);
+	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+
+	float h = 4;
+	float aspectRatio = vWidth / vHeight;
+	float w = aspectRatio * h;
+	mat4 ViewMat = myLookAt(cameraPos, cameraPos + viewDirection, vec3(0, 1, 0));
+	mat4 ProjMat = myPerspective(45, aspectRatio, 0.01, 20);
+
+	g_Mat = ProjMat * ViewMat;
+	drawScene(false);							// drawing scene except the camera
+
+
+	// RIGHT SCREEN : View from above (Orthographic parallel projection)
+	glViewport(vWidth, 0, vWidth, vHeight);
+	h = MazeSize;
+	w = aspectRatio * h;
+	ViewMat = myLookAt(vec3(0, 5, 0), vec3(0, 0, 0), vec3(0, 0, -1));
+	ProjMat = myOrtho(-w / 2, w / 2, -h / 2, h / 2, 0, 20);
+
+	g_Mat = ProjMat * ViewMat;
+	drawScene(true);
+
+
 	glutSwapBuffers();
 }
 
-void myIdle()
+void idle()
 {
-	if(bPlay)
+	g_time += 1;
+
+	if ((GetAsyncKeyState('A') & 0x8000) == 0x8000)		// if "A" key is pressed	: Go Left
 	{
-		g_time += 1/60.0f;
-		Sleep(1/60.0f*1000);
+		cameraAngle = (cameraAngle + cameraRotateSpeed) % 360;
+		vec4 rotateM = RotateY(cameraAngle) * vec3(0, 0, -1);
+		viewDirection.x = rotateM.x;
+		viewDirection.z = rotateM.z;
+	}
+	if ((GetAsyncKeyState('D') & 0x8000) == 0x8000)		// if "D" key is pressed	: Go Right
+	{
+		cameraAngle = (cameraAngle - cameraRotateSpeed) % 360;
+		vec4 rotateM = RotateY(cameraAngle) * vec3(0, 0, -1);
+		viewDirection.x = rotateM.x;
+		viewDirection.z = rotateM.z;
+	}
+	if ((GetAsyncKeyState('W') & 0x8000) == 0x8000 && !isWall)		// if "W" key is pressed	: Go Forward
+	{
+		cameraPos += cameraSpeed * viewDirection;
+		getCameraIndex();
+	}
+	if ((GetAsyncKeyState('S') & 0x8000) == 0x8000 && !isWall)		// if "S" key is pressed	: Go Backward
+	{
+		cameraPos += cameraSpeed * -viewDirection;
+		getCameraIndex();
+	}
 
-		if (bChasingTarget == false)
-		{
-			ang1 = 45 * sin(g_time * 3.141592);
-			ang2 = 60 * sin(g_time * 2 * 3.141592);
-			ang3 = 30 * sin(g_time * 3.141592);
-		}
-		else
-			computeAngle();
+	Sleep(16);											// for vSync
+	glutPostRedisplay();
+}
 
-		glutPostRedisplay();
+void myKeyboard(unsigned char c, int x, int  y)
+{
+	switch (c)
+	{
+		case 'q':
+			AStar();
+			isHint ? isHint = false : isHint = true;
+			glutPostRedisplay();
+			break;
+
+		default:
+			break;
 	}
 }
 
-void myKeyboard(unsigned char c, int x, int y)
+void reshape(int wx, int wy)
 {
-
-	switch(c)
-	{
-	case '1':
-		bChasingTarget = !bChasingTarget;
-		break;
-	case '2':
-		bDrawTarget = !bDrawTarget;
-		break;
-	case '3':
-		target.toggleRandom();
-		break;
-	case ' ':
-		bPlay = !bPlay;
-		break;
-	default:
-		break;
-	}
+	printf("%d %d \n", wx, wy);
+	wWidth = wx;
+	wHeight = wy;
+	glutPostRedisplay();
 }
 
 
-int main(int argc, char ** argv)
+int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA|GLUT_DEPTH);
-	glutInitWindowSize(500,500);
-	glutCreateWindow("Simple Robot Arm");
+
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+	glutInitWindowSize(wWidth, wHeight);
+
+	glutCreateWindow("Homework3 (Maze Navigator)");
 
 	glewExperimental = true;
 	glewInit();
 
-	myInit();
-	glutDisplayFunc(myDisplay);
-	glutKeyboardFunc(myKeyboard);
-	glutIdleFunc(myIdle);
+	printf("OpenGL %s, GLSL %s\n", glGetString(GL_VERSION),
+		glGetString(GL_SHADING_LANGUAGE_VERSION));
 
+	myInit();
+	glutDisplayFunc(display);
+	glutIdleFunc(idle);
+	glutKeyboardFunc(myKeyboard);
+	glutReshapeFunc(reshape);
 	glutMainLoop();
 
 	return 0;

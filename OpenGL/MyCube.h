@@ -50,16 +50,16 @@ void MyCube::Quad (int a, int b, int c, int d, vec4 * vin, vec4 * cin)
 {
 	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a]; 
 	NumCurVertices++;
-	Vertices[NumCurVertices].position = vin[b]; Vertices[NumCurVertices].color = cin[b];
+	Vertices[NumCurVertices].position = vin[b]; Vertices[NumCurVertices].color = cin[b]; 
 	NumCurVertices++;
 	Vertices[NumCurVertices].position = vin[c]; Vertices[NumCurVertices].color = cin[c]; 
 	NumCurVertices++;
-
-	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a];
+	
+	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a]; 
 	NumCurVertices++;
 	Vertices[NumCurVertices].position = vin[c]; Vertices[NumCurVertices].color = cin[c]; 
 	NumCurVertices++;
-	Vertices[NumCurVertices].position = vin[d]; Vertices[NumCurVertices].color = cin[d];
+	Vertices[NumCurVertices].position = vin[d]; Vertices[NumCurVertices].color = cin[d]; 
 	NumCurVertices++;
 
 }
@@ -68,11 +68,10 @@ void MyCube::ColorCube(vec4 * vin, vec4 * cin)
 {
 	Quad(1,0,3,2, vin, cin);
 	Quad(2,3,7,6, vin, cin);
-	Quad(6,7,4,5, vin, cin);
+	Quad(3,0,4,7, vin, cin);
+	Quad(6,5,1,2, vin, cin);
+	Quad(4,5,6,7, vin, cin);
 	Quad(5,4,0,1, vin, cin);
-	Quad(5,1,2,6, vin, cin);
-	Quad(3,7,4,0, vin, cin);
-	
 }
 
 
