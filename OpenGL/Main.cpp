@@ -45,7 +45,8 @@ float g_time = 0;
 bool isWall = false;
 bool isHint = false;
 bool isTrace = false;
-std::vector<std::pair<int, int>> traceLine;
+std::vector<vec3> traceLine;
+std::vector<vec3>::iterator nextPos;
 
 struct Node
 {
@@ -58,6 +59,21 @@ struct Node
 		return (g + h) > (other.g + other.h);
 	}
 };
+
+inline vec3 getPositionFromIndex(int i, int j)
+{
+	float unit = 1;
+	vec3 leftTopPosition = vec3(-MazeSize / 2.0 + unit / 2, 0, -MazeSize / 2.0 + unit / 2);
+	vec3 xDir = vec3(1, 0, 0);
+	vec3 zDir = vec3(0, 0, 1);
+	return leftTopPosition + i * xDir + j * zDir;
+}
+
+inline void getCameraIndex()
+{
+	camera_idx.first = (cameraPos.x + MazeSize / 2) / 1;
+	camera_idx.second = (cameraPos.z + MazeSize / 2) / 1;
+}
 
 void AStar()
 {
@@ -81,13 +97,13 @@ void AStar()
 
 			while(prev[x][z].first != -1)
 			{
-				traceLine.push_back(std::make_pair(x, z));
+				traceLine.push_back(getPositionFromIndex(x, z));
 				int tmp = x;
 				x = prev[tmp][z].first;
 				z = prev[tmp][z].second;
 			}
 
-			traceLine.push_back(std::make_pair(x, z));
+			traceLine.push_back(getPositionFromIndex(x, z));
 			reverse(traceLine.begin(), traceLine.end());
 			return;
 		}
@@ -111,21 +127,6 @@ void AStar()
 			}
 		}
 	}
-}
-
-inline vec3 getPositionFromIndex(int i, int j)
-{
-	float unit = 1;
-	vec3 leftTopPosition = vec3(-MazeSize / 2.0 + unit / 2, 0, -MazeSize / 2.0 + unit / 2);
-	vec3 xDir = vec3(1, 0, 0);
-	vec3 zDir = vec3(0, 0, 1);
-	return leftTopPosition + i * xDir + j * zDir;
-}
-
-inline void getCameraIndex()
-{
-	camera_idx.first = (cameraPos.x + MazeSize / 2) / 1;
-	camera_idx.second = (cameraPos.z + MazeSize / 2) / 1;
 }
 
 void LoadMaze()
@@ -218,13 +219,13 @@ void DrawGrid()
 	{
 		for (int i = 0; i < traceLine.size() - 1; i++)
 		{
-			vec3 prev = getPositionFromIndex(traceLine[i].first, traceLine[i].second);
-			vec3 next = getPositionFromIndex(traceLine[i + 1].first, traceLine[i + 1].second);
+			vec3 prev = traceLine[i];
+			vec3 next = traceLine[i + 1];
 			mat4 m;
-			if(prev.x == next.x) m = Translate(prev)* Scale(0.1, 0.1, 0.4);
-			else m = Translate(prev) * Scale(0.4, 0.1, 0.1);
+			if(prev.x == next.x) m = Translate(0, -0.5, 0) * Translate((prev + next) / 2) * Scale(0.1, 0.05, h / n * 4);
+			else m = Translate(0, -0.5, 0) * Translate((prev + next) / 2) * Scale(w / n * 4, 0.05, 0.1);
 			glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * m);
-			glUniform4f(uColor, 1, 0, 0, 1);
+			glUniform4f(uColor, abs(sin(g_time* 0.05)), 0, 0, 1);
 			cube.Draw(program);
 		}
 	}
@@ -315,34 +316,62 @@ void display()
 
 	glutSwapBuffers();
 }
-
+bool isRotating = false;
 void idle()
 {
 	g_time += 1;
 
-	if ((GetAsyncKeyState('A') & 0x8000) == 0x8000)		// if "A" key is pressed	: Go Left
+	if (!isTrace)
 	{
-		cameraAngle = (cameraAngle + cameraRotateSpeed) % 360;
-		vec4 rotateM = RotateY(cameraAngle) * vec3(0, 0, -1);
-		viewDirection.x = rotateM.x;
-		viewDirection.z = rotateM.z;
+		if ((GetAsyncKeyState('A') & 0x8000) == 0x8000)		// if "A" key is pressed	: Go Left
+		{
+			cameraAngle = (cameraAngle + cameraRotateSpeed) % 360;
+			vec4 rotateM = RotateY(cameraAngle) * vec3(0, 0, -1);
+			viewDirection.x = rotateM.x;
+			viewDirection.z = rotateM.z;
+		}
+		if ((GetAsyncKeyState('D') & 0x8000) == 0x8000)		// if "D" key is pressed	: Go Right
+		{
+			cameraAngle = (cameraAngle - cameraRotateSpeed) % 360;
+			vec4 rotateM = RotateY(cameraAngle) * vec3(0, 0, -1);
+			viewDirection.x = rotateM.x;
+			viewDirection.z = rotateM.z;
+		}
+		if ((GetAsyncKeyState('W') & 0x8000) == 0x8000 && !isWall)		// if "W" key is pressed	: Go Forward
+		{
+			cameraPos += cameraSpeed * viewDirection;
+			getCameraIndex();
+		}
+		if ((GetAsyncKeyState('S') & 0x8000) == 0x8000 && !isWall)		// if "S" key is pressed	: Go Backward
+		{
+			cameraPos += cameraSpeed * -viewDirection;
+			getCameraIndex();
+		}
 	}
-	if ((GetAsyncKeyState('D') & 0x8000) == 0x8000)		// if "D" key is pressed	: Go Right
+
+	else
 	{
-		cameraAngle = (cameraAngle - cameraRotateSpeed) % 360;
-		vec4 rotateM = RotateY(cameraAngle) * vec3(0, 0, -1);
-		viewDirection.x = rotateM.x;
-		viewDirection.z = rotateM.z;
-	}
-	if ((GetAsyncKeyState('W') & 0x8000) == 0x8000 && !isWall)		// if "W" key is pressed	: Go Forward
-	{
-		cameraPos += cameraSpeed * viewDirection;
-		getCameraIndex();
-	}
-	if ((GetAsyncKeyState('S') & 0x8000) == 0x8000 && !isWall)		// if "S" key is pressed	: Go Backward
-	{
-		cameraPos += cameraSpeed * -viewDirection;
-		getCameraIndex();
+		viewDirection = normalize(*nextPos - cameraPos);
+		if (viewDirection.z == -1) cameraAngle = 0;
+		else if (viewDirection.x == -1) cameraAngle = 90;
+		else if (viewDirection.z == 1) cameraAngle = 180;
+		else if (viewDirection.x == 1) cameraAngle = -90;
+
+		if (length(cameraPos - goalPos) >= cameraSpeed)
+		{
+			if (length(*nextPos - cameraPos) <= cameraSpeed && nextPos != traceLine.end() - 1)
+			{
+				++nextPos;
+				isRotating = true;
+			}
+			if(!isRotating) cameraPos += cameraSpeed * viewDirection;
+			else
+			{
+				cameraAngle += cameraRotateSpeed;
+				//if(cameraAngle == )
+			}
+		}
+		else isTrace = !isTrace;
 	}
 
 	Sleep(16);											// for vSync
@@ -351,16 +380,20 @@ void idle()
 
 void myKeyboard(unsigned char c, int x, int  y)
 {
-	switch (c)
+	if (c == 'q')
 	{
-		case 'q':
-			AStar();
-			isHint ? isHint = false : isHint = true;
-			glutPostRedisplay();
-			break;
+		AStar();
+		isHint = !isHint;
+		if (isTrace) isTrace = !isTrace;
+		glutPostRedisplay();
+	}
 
-		default:
-			break;
+	else if (c == ' ' && isHint)
+	{
+		cameraPos = traceLine[0];
+		nextPos = traceLine.begin() + 1;
+		isTrace = !isTrace;
+		glutPostRedisplay();
 	}
 }
 
