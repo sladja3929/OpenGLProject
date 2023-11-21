@@ -21,29 +21,24 @@ C:\Github\OpenGLProject\OpenGL\main.cpp(201,10): warning C4244: '초기화 중':
 C:\Github\OpenGLProject\OpenGL\main.cpp(205,72): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
 C:\Github\OpenGLProject\OpenGL\main.cpp(212,72): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
 C:\Github\OpenGLProject\OpenGL\main.cpp(220,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(225,110): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(226,94): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(225,121): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(226,105): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
 C:\Github\OpenGLProject\OpenGL\main.cpp(228,27): warning C4244: '인수': 'double'에서 'GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(238,49): warning C4244: '인수': 'int'에서 'const GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(244,77): warning C4244: '인수': 'int'에서 'const GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(254,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(293,27): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(293,19): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(300,56): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(307,32): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(307,24): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(307,13): warning C4244: '인수': 'float'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(308,6): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(329,27): warning C4244: '인수': 'int'에서 'const GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(237,20): warning C4244: '초기화 중': 'double'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(256,22): warning C4305: '초기화 중': 'double'에서 'float'(으)로 잘립니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(295,27): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(295,19): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(302,56): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(309,32): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(309,24): warning C4244: '인수': 'float'에서 'GLsizei'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(309,13): warning C4244: '인수': 'float'에서 'GLint'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(310,6): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(330,27): warning C4244: '인수': 'int'에서 'const GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
 C:\Github\OpenGLProject\OpenGL\main.cpp(336,27): warning C4244: '인수': 'int'에서 'const GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(402,11): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(403,12): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(413,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(413,21): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-freeglut_static_vs2015_d.lib(fg_geometry.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_geometry.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-freeglut_static_vs2015_d.lib(fg_joystick.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_joystick.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-freeglut_static_vs2015_d.lib(fg_teapot.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_teapot.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-freeglut_static_vs2015_d.lib(fg_font.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_font.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-freeglut_static_vs2015_d.lib(fg_menu.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_menu.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
-freeglut_static_vs2015_d.lib(fg_joystick_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_joystick_mswin.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(371,29): warning C4244: '인수': 'int'에서 'const GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(377,29): warning C4244: '인수': 'int'에서 'const GLfloat'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(414,11): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(415,12): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(425,29): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(425,21): warning C4244: '인수': 'float'에서 'int'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   OpenGL.vcxproj -> C:\Github\OpenGLProject\OpenGL\Debug\OpenGL.exe

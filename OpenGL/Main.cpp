@@ -9,7 +9,7 @@
 #include <vec.h>
 #include <mat.h>
 
-#define MAZE_FILE	"maze2.txt"
+#define MAZE_FILE	"maze.txt"
 
 #include <iostream>
 #include <queue>
@@ -38,7 +38,7 @@ char maze[255][255] = { 0 };
 float cameraSpeed = 0.1;
 
 int cameraRotateSpeed = 5;
-int cameraAngle = 0;
+//int cameraAngle = 0;
 
 float g_time = 0;
 
@@ -222,10 +222,10 @@ void DrawGrid()
 			vec3 prev = traceLine[i];
 			vec3 next = traceLine[i + 1];
 			mat4 m;
-			if(prev.x == next.x) m = Translate(0, -0.5, 0) * Translate((prev + next) / 2) * Scale(0.1, 0.05, h / n * 4);
-			else m = Translate(0, -0.5, 0) * Translate((prev + next) / 2) * Scale(w / n * 4, 0.05, 0.1);
+			if(prev.x == next.x) m = Translate(0, -0.5, 0) * Translate((prev + next) / 2) * Scale(0.1, 0.05, h / n * 4 / (h / 10));
+			else m = Translate(0, -0.5, 0) * Translate((prev + next) / 2) * Scale(w / n * 4 / (w / 10), 0.05, 0.1);
 			glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * m);
-			glUniform4f(uColor, abs(sin(g_time* 0.05)), 0, 0, 1);
+			glUniform4f(uColor, abs(sin(g_time* 0.05 + i * 3)), 0, 0, 1);
 			cube.Draw(program);
 		}
 	}
@@ -234,7 +234,9 @@ void DrawGrid()
 void drawCamera()
 {
 	float cameraSize = 0.5;
-	
+	float cameraAngle = acos(dot(viewDirection, vec3(0, 0, -1))) * 180  / 3.141592;
+	if(cross(viewDirection, vec3(0, 0, -1)).y > 0) cameraAngle = -cameraAngle;
+
 	mat4 ModelMat = Translate(cameraPos) * RotateY(cameraAngle) * Scale(vec3(cameraSize));
 	glUseProgram(program);
 	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
@@ -316,7 +318,7 @@ void display()
 
 	glutSwapBuffers();
 }
-bool isRotating = false;
+
 void idle()
 {
 	g_time += 1;
@@ -325,15 +327,13 @@ void idle()
 	{
 		if ((GetAsyncKeyState('A') & 0x8000) == 0x8000)		// if "A" key is pressed	: Go Left
 		{
-			cameraAngle = (cameraAngle + cameraRotateSpeed) % 360;
-			vec4 rotateM = RotateY(cameraAngle) * vec3(0, 0, -1);
+			vec4 rotateM = RotateY(cameraRotateSpeed) * viewDirection;
 			viewDirection.x = rotateM.x;
 			viewDirection.z = rotateM.z;
 		}
 		if ((GetAsyncKeyState('D') & 0x8000) == 0x8000)		// if "D" key is pressed	: Go Right
 		{
-			cameraAngle = (cameraAngle - cameraRotateSpeed) % 360;
-			vec4 rotateM = RotateY(cameraAngle) * vec3(0, 0, -1);
+			vec4 rotateM = RotateY(-cameraRotateSpeed) * viewDirection;
 			viewDirection.x = rotateM.x;
 			viewDirection.z = rotateM.z;
 		}
@@ -351,24 +351,33 @@ void idle()
 
 	else
 	{
-		viewDirection = normalize(*nextPos - cameraPos);
-		if (viewDirection.z == -1) cameraAngle = 0;
-		else if (viewDirection.x == -1) cameraAngle = 90;
-		else if (viewDirection.z == 1) cameraAngle = 180;
-		else if (viewDirection.x == 1) cameraAngle = -90;
-
 		if (length(cameraPos - goalPos) >= cameraSpeed)
 		{
-			if (length(*nextPos - cameraPos) <= cameraSpeed && nextPos != traceLine.end() - 1)
+			if (length(*nextPos - cameraPos) < 0.01f && nextPos != traceLine.end() - 1)
 			{
 				++nextPos;
-				isRotating = true;
 			}
-			if(!isRotating) cameraPos += cameraSpeed * viewDirection;
+
+			if (abs(dot(viewDirection, normalize(*nextPos - cameraPos)) - 1) < 0.01f)
+			{
+				viewDirection = normalize(*nextPos - cameraPos);
+				cameraPos += cameraSpeed * viewDirection;				
+			}
+
 			else
 			{
-				cameraAngle += cameraRotateSpeed;
-				//if(cameraAngle == )
+				if (cross(*nextPos - cameraPos, viewDirection).y < 0)
+				{
+					vec4 rotateM = RotateY(cameraRotateSpeed) * viewDirection;
+					viewDirection.x = rotateM.x;
+					viewDirection.z = rotateM.z;
+				}
+				else if (cross(*nextPos - cameraPos, viewDirection).y > 0)
+				{
+					vec4 rotateM = RotateY(-cameraRotateSpeed) * viewDirection;
+					viewDirection.x = rotateM.x;
+					viewDirection.z = rotateM.z;
+				}
 			}
 		}
 		else isTrace = !isTrace;
@@ -385,13 +394,15 @@ void myKeyboard(unsigned char c, int x, int  y)
 		AStar();
 		isHint = !isHint;
 		if (isTrace) isTrace = !isTrace;
+		getCameraIndex();
 		glutPostRedisplay();
 	}
 
 	else if (c == ' ' && isHint)
 	{
-		cameraPos = traceLine[0];
+		cameraPos = traceLine[0];		
 		nextPos = traceLine.begin() + 1;
+		viewDirection = normalize(*nextPos - cameraPos);
 		isTrace = !isTrace;
 		glutPostRedisplay();
 	}
