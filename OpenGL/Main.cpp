@@ -176,8 +176,9 @@ void display()
 	glUniformMatrix4fv(uProjMat, 1, GL_TRUE, ProjMat);
 	glUniformMatrix4fv(uModelMat, 1, GL_TRUE, ViewMat * ModelMat);
 	
-	vec4 LPos = vec4(2 * sin(g_Time * 3.14 / 2), 2, -2 + 2 * cos(g_Time * 3.14 / 2), 1);
-	vec4 LCol = vec4(0.5, 0.5, 0.5, 1);
+	//vec4 LPos = vec4(2 * sin(g_Time * 3.14 / 2), 2, -2 + 2 * cos(g_Time * 3.14 / 2), 1);
+	vec4 LPos = vec4(2, 2, 0, 1);
+	vec4 LCol = vec4(1, 1, 1, 1);
 	vec4 Kamb = vec4(0.1, 0.1, 0.1, 1);
 	vec4 KDif = vec4(0.5, 0.5, 0.5, 1);
 	vec4 KSpc = vec4(0.3, 0.3, 0.3, 1);
@@ -196,8 +197,6 @@ void display()
 	glUniform4f(uKDif, KDif[0], KDif[1], KDif[2], KDif[3]);
 	glUniform4f(uKSpc, KSpc[0], KSpc[1], KSpc[2], KSpc[3]);
 	glUniform1f(uShine, shine);
-
-
 
 	//cube.Draw(prog_phong);
 	sphere.Draw(prog_phong);
