@@ -96,7 +96,7 @@ mat4 myPerspective(float fovy, float aspectRatio, float zNear, float zFar)
 void myInit()
 {
 	cube.Init();
-	sphere.Init(200, 200, (0.5,0.5,0.5,0.5));
+	sphere.Init(20, 20, (0.5,0.5,0.5,0.5));
 
 	program = InitShader("vshader.glsl", "fshader.glsl");
 	prog_phong = InitShader("vphong.glsl", "fphong.glsl");
@@ -183,8 +183,8 @@ void display()
 	vec4 KSpc = vec4(0.3, 0.3, 0.3, 1);
 	float shine = 50;
 
-	GLuint uLPos = glGetUniformLocation(prog_phong, "ulPos");
-	GLuint uLCol = glGetUniformLocation(prog_phong, "ulCol");
+	GLuint uLPos = glGetUniformLocation(prog_phong, "uLPos");
+	GLuint uLCol = glGetUniformLocation(prog_phong, "uLCol");
 	GLuint uKamb = glGetUniformLocation(prog_phong, "uKamb");
 	GLuint uKDif = glGetUniformLocation(prog_phong, "uKDif");
 	GLuint uKSpc = glGetUniformLocation(prog_phong, "uKSpc");

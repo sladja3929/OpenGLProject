@@ -80,15 +80,35 @@ GLuint MySphere::Init(int la_slice, int lo_slice, vec4 color)
 			
 			if(i!=lo_slice-1)
 			{
+				vec3 p = a - b;
+				vec3 q = c - b;
+				vec3 n = normalize(cross(p, q));
+
+				//flat shading
+				//Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = n; cur++;
+				//Vertices[cur].position = b;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
+				//Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
+
+				//smooth shading
 				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = na; cur++;
-				Vertices[cur].position = b;	Vertices[cur].color = color; Vertices[cur].normal = nb; cur ++;
-				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = nc; cur ++;
+				Vertices[cur].position = b;	Vertices[cur].color = color; Vertices[cur].normal = nb; cur++;
+				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = nc; cur++;
 			}
 			if(i!=0)
 			{
-				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = nc; cur ++;
-				Vertices[cur].position = d;	Vertices[cur].color = color; Vertices[cur].normal = nd; cur ++;
-				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = na; cur ++;
+				vec3 p = c - d;
+				vec3 q = a - d;
+				vec3 n = normalize(cross(p, q));
+
+				//flat shading
+				//Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
+				//Vertices[cur].position = d;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
+				//Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
+
+				//smooth shading
+				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = nc; cur++;
+				Vertices[cur].position = d;	Vertices[cur].color = color; Vertices[cur].normal = nd; cur++;
+				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = na; cur++;
 			}
 		}
 	}
