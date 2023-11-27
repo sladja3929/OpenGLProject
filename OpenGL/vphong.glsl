@@ -12,7 +12,7 @@ uniform mat4 uProjMat;
 uniform mat4 uModelMat;
 uniform vec4 uLPos;
 uniform vec4 uLCol;
-uniform vec4 uKamb;
+uniform vec4 uKAmb;
 uniform vec4 uKDif;
 uniform vec4 uKSpc;
 uniform float uShine;
@@ -27,7 +27,7 @@ void main()
 	L3 = normalize(L.xyz);
 	vec4 N = uModelMat * vec4(vNormal, 0);
 	N3 = normalize(N.xyz);          //camera coord
-	vec4 V = vec4(0, 0, 0, 1);
+	vec4 V = vec4(0, 0, 0, 1) - P;
 	V3 = normalize(V.xyz);
 
 	color = vColor;

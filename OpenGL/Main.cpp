@@ -179,21 +179,21 @@ void display()
 	//vec4 LPos = vec4(2 * sin(g_Time * 3.14 / 2), 2, -2 + 2 * cos(g_Time * 3.14 / 2), 1);
 	vec4 LPos = vec4(2, 2, 0, 1);
 	vec4 LCol = vec4(1, 1, 1, 1);
-	vec4 Kamb = vec4(0.1, 0.1, 0.1, 1);
-	vec4 KDif = vec4(0.5, 0.5, 0.5, 1);
+	vec4 KAmb = vec4(0.1, 0.1, 0.2, 1);
+	vec4 KDif = vec4(1.0, 0.8, 0.5, 1);
 	vec4 KSpc = vec4(0.3, 0.3, 0.3, 1);
 	float shine = 50;
 
 	GLuint uLPos = glGetUniformLocation(prog_phong, "uLPos");
 	GLuint uLCol = glGetUniformLocation(prog_phong, "uLCol");
-	GLuint uKamb = glGetUniformLocation(prog_phong, "uKamb");
+	GLuint uKAmb = glGetUniformLocation(prog_phong, "uKAmb");
 	GLuint uKDif = glGetUniformLocation(prog_phong, "uKDif");
 	GLuint uKSpc = glGetUniformLocation(prog_phong, "uKSpc");
 	GLuint uShine = glGetUniformLocation(prog_phong, "uShine");
 
 	glUniform4f(uLPos, LPos[0], LPos[1], LPos[2], LPos[3]);
 	glUniform4f(uLCol, LCol[0], LCol[1], LCol[2], LCol[3]);
-	glUniform4f(uKamb, Kamb[0], Kamb[1], Kamb[2], Kamb[3]);
+	glUniform4f(uKAmb, KAmb[0], KAmb[1], KAmb[2], KAmb[3]);
 	glUniform4f(uKDif, KDif[0], KDif[1], KDif[2], KDif[3]);
 	glUniform4f(uKSpc, KSpc[0], KSpc[1], KSpc[2], KSpc[3]);
 	glUniform1f(uShine, shine);

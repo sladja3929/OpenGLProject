@@ -10,7 +10,7 @@ uniform mat4 uProjMat;
 uniform mat4 uModelMat;
 uniform vec4 uLPos;
 uniform vec4 uLCol;
-uniform vec4 uKamb;
+uniform vec4 uKAmb;
 uniform vec4 uKDif;
 uniform vec4 uKSpc;
 uniform float uShine;
@@ -24,7 +24,7 @@ void main()
 	// R = 2*dot(N, L)*N - L
 	vec3 R = 2 * dot(N, L) * N - L;
 
-	vec4 amb = uKamb * uLCol;
+	vec4 amb = uKAmb * uLCol;
 
 	float d = max(dot(L, N), 0);
 	if(d > 0.8) d = 1;

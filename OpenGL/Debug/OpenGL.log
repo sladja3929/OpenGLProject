@@ -10,10 +10,13 @@ C:\Github\OpenGLProject\OpenGL\main.cpp(133,60): warning C4305: '인수': 'doubl
 C:\Github\OpenGLProject\OpenGL\main.cpp(140,60): warning C4305: '인수': 'double'에서 'const GLfloat'(으)로 잘립니다.
 C:\Github\OpenGLProject\OpenGL\main.cpp(160,49): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
 C:\Github\OpenGLProject\OpenGL\main.cpp(182,35): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(183,35): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
 C:\Github\OpenGLProject\OpenGL\main.cpp(184,35): warning C4305: '인수': 'double'에서 'GLfloat'(으)로 잘립니다.
-C:\Github\OpenGLProject\OpenGL\main.cpp(211,17): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
+C:\Github\OpenGLProject\OpenGL\main.cpp(209,17): warning C4305: '+=': 'double'에서 'float'(으)로 잘립니다.
 freeglut_static_vs2015_d.lib(fg_geometry.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_geometry.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 freeglut_static_vs2015_d.lib(fg_joystick.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_joystick.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 freeglut_static_vs2015_d.lib(fg_teapot.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_teapot.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_font.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_font.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
+freeglut_static_vs2015_d.lib(fg_menu.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_menu.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
 freeglut_static_vs2015_d.lib(fg_joystick_mswin.obj) : warning LNK4099: 'freeglut_static.pdb' PDB를 'freeglut_static_vs2015_d.lib(fg_joystick_mswin.obj)' 또는 'C:\Github\OpenGLProject\OpenGL\Debug\freeglut_static.pdb'에서 찾을 수 없습니다. 디버그 정보가 없는 것처럼 개체를 링크합니다.
   OpenGL.vcxproj -> C:\Github\OpenGLProject\OpenGL\Debug\OpenGL.exe
