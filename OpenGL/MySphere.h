@@ -73,42 +73,22 @@ GLuint MySphere::Init(int la_slice, int lo_slice, vec4 color)
 			vec3 c(r2*cos(db*(j+1)), y2, r2*sin(db*(j+1)));
 			vec3 d(r1*cos(db*(j+1)), y1, r1*sin(db*(j+1)));
 
-			vec3 na = normalize(a);
-			vec3 nb = normalize(b);
-			vec3 nc = normalize(c);
-			vec3 nd = normalize(d);
-			
+			vec2 ta = vec2((float)j / lo_slice, (float)i / la_slice);
+			vec2 tb = vec2((float)j / lo_slice, (float)(i + 1) / la_slice);
+			vec2 tc = vec2((float)(j + 1) / lo_slice, (float)(i + 1) / la_slice);
+			vec2 td = vec2((float)(j + 1) / lo_slice, (float)i / la_slice);
+		
 			if(i!=lo_slice-1)
 			{
-				vec3 p = a - b;
-				vec3 q = c - b;
-				vec3 n = normalize(cross(p, q));
-
-				//flat shading
-				//Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = n; cur++;
-				//Vertices[cur].position = b;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
-				//Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
-
-				//smooth shading
-				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = na; cur++;
-				Vertices[cur].position = b;	Vertices[cur].color = color; Vertices[cur].normal = nb; cur++;
-				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = nc; cur++;
+				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = a; Vertices[cur].texCcur ++;
+				Vertices[cur].position = b;	Vertices[cur].color = color; Vertices[cur].normal = b; cur ++;
+				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = c; cur ++;
 			}
 			if(i!=0)
 			{
-				vec3 p = c - d;
-				vec3 q = a - d;
-				vec3 n = normalize(cross(p, q));
-
-				//flat shading
-				//Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
-				//Vertices[cur].position = d;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
-				//Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = n; cur ++;
-
-				//smooth shading
-				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = nc; cur++;
-				Vertices[cur].position = d;	Vertices[cur].color = color; Vertices[cur].normal = nd; cur++;
-				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = na; cur++;
+				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = c; cur ++;
+				Vertices[cur].position = d;	Vertices[cur].color = color; Vertices[cur].normal = d; cur ++;
+				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = a; cur ++;
 			}
 		}
 	}
@@ -136,7 +116,7 @@ void MySphere::SetPositionAndOtherAttributes(GLuint program)
 
 	GLuint vNormal = glGetAttribLocation(program, "vNormal");
 	glEnableVertexAttribArray(vNormal);
-	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_TRUE, sizeof(MySphereVertex), BUFFER_OFFSET(sizeof(vec4) * 2));
+	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, sizeof(MySphereVertex), BUFFER_OFFSET(sizeof(vec4)+sizeof(vec4)));
 
 }
 

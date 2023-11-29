@@ -19,17 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fphong.glsl" />
-    <None Include="fshader.glsl" />
-    <None Include="vphong.glsl" />
-    <None Include="vshader.glsl" />
+    <ClInclude Include="MySphere.h" />
+    <ClInclude Include="Targa.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fPhong.glsl" />
+    <None Include="vPhong.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="MyCube.h" />
-    <ClInclude Include="MySphere.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
