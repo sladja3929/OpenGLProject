@@ -15,7 +15,7 @@ uniform vec4 uSpc;
 uniform float uShininess; 
 
 uniform float uTime;
-uniform Sampler2D uImg;
+uniform sampler2D uImg;
 
 void main()
 {
@@ -26,7 +26,9 @@ void main()
 
     float NL = max(dot(N, L), 0); 
 	float VR = pow(max(dot(H, N), 0), uShininess); 
-	fColor = uAmb + uDif*NL + uSpc*VR; 
+	vec4 dif = texture2D(uImg, TexCoord);
 
-	fColor.w = 1;	
+	fColor = uAmb + dif*NL + uSpc*VR; 
+
+	fColor.w = 1;
 }
