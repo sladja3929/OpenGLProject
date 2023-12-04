@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #include <vgl.h>
 #include <InitShader.h>
 #include <MyCube.h>
@@ -63,42 +65,62 @@ mat4 myPerspective(float angle, float aspect, float zNear, float zFar)
 
 }
 
+#include "Targa.h"
+
 void myInitTexture()
 {
-	// 1. generate texture image
+	/*
+		// 1. generate texture image
 
-	const int w = 512;
-	const int h = 512;
-	unsigned char img[h][w][3];
+		const int w = 512;
+		const int h = 512;
+		unsigned char img[h][w][3];
 
-	int dx = w / 16;
-	for (int y = 0; y < h; y++)
-		for (int x = 0; x < w; x++)
-		{
-			img[y][x][0] = (unsigned char)0;			// red
-			img[y][x][1] = (unsigned char)0;			// green
-			img[y][x][2] = (unsigned char)0;			// blue
+		int dx = w / 16;
+		int dy = h / 16;
+		for(int y = 0; y<h; y++)
+			for (int x = 0; x < w; x++)
+			{
+				img[y][x][0] = (unsigned char) 0;			// red
+				img[y][x][1] = (unsigned char) 0;			// green
+				img[y][x][2] = (unsigned char) 0;			// blue
 
-			if ((x / dx) % 2 == 0)
-				img[y][x][0] = (unsigned char)255;
+				int i = (float)x / dx;
+				int j = (float)y / dx;
+				//j = 0;
+
+				if ((i+j) % 2 == 0)
+					img[y][x][0] = (unsigned char)255;
+			}
+	*/
+	// 1. Load Texture image
+
+	for (int i = 0; i < 4; i++)
+	{
+		GLuint tex;
+		glGenTextures(1, &tex);
+
+		STGA img;
+		switch (i) {
+		case 0:img.loadTGA("earthmap_dif.tga"); glActiveTexture(GL_TEXTURE0); break;
+		case 1:img.loadTGA("earthmap_cld.tga"); glActiveTexture(GL_TEXTURE1); break;
+		case 2:img.loadTGA("earthmap_light.tga"); glActiveTexture(GL_TEXTURE2); break;
+		case 3:img.loadTGA("earthmap_spec.tga"); glActiveTexture(GL_TEXTURE3); break;
+		default: break;
 		}
+		int w = img.width;
+		int h = img.height;
+		glBindTexture(GL_TEXTURE_2D, tex);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_BGR, GL_UNSIGNED_BYTE, img.data);
 
-	// 2. send texture data to GPU
-	GLuint tex;
-	glGenTextures(1, &tex);
-	glActiveTexture(GL_TEXTURE0);
+		// 3. set texture parameters	// 필수
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-	glBindTexture(GL_TEXTURE_2D, tex);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB, GL_UNSIGNED_BYTE, img);
-	//level: mip mapping level, border: 0과 1을 분리할지 동일시할지(감쌀때)
-	//gpu에 w, h만큼 rgb형식의 메모리를 만들고, 내가 보내는 데이터는 unsigned byte 타입 rgb 형식의 img 
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
 
-	// 3. set texture parameters	// 필수
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 }
 
 
@@ -120,7 +142,7 @@ void display()
 	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 	glEnable(GL_DEPTH_TEST);
 
-	mat4 ModelMat = myLookAt(vec3(2, 2, 2), vec3(0, 0, 0), vec3(0, 1, 0)) * RotateY(g_Time / 10);
+	mat4 ModelMat = myLookAt(vec3(2, 2, 2), vec3(0, 0, 0), vec3(0, 1, 0)) * RotateY(g_Time * 30);
 	mat4 ProjMat = myPerspective(45, g_aspect, 0.01, 10.0f);
 
 	g_Mat = ProjMat * ModelMat;
@@ -129,7 +151,8 @@ void display()
 
 	// 1. Define Light Properties
 	// 
-	vec4 lPos = vec4(20 * sin(-g_Time), 10, 20 * cos(-g_Time), 1);
+	vec4 lPos = vec4(20 * sin(-g_Time / 3), 10, 20 * cos(-g_Time / 3), 1);
+	//vec4 lPos = vec4(10, 10, 0, 1);
 	vec4 lAmb = vec4(0.3, 0.3, 0.3, 1);
 	vec4 lDif = vec4(1, 1, 1, 1);
 	vec4 lSpc = lDif;
@@ -156,7 +179,10 @@ void display()
 	GLuint uSpc = glGetUniformLocation(phong_prog, "uSpc");
 	GLuint uShininess = glGetUniformLocation(phong_prog, "uShininess");
 	GLuint uTime = glGetUniformLocation(phong_prog, "uTime");
-	GLuint uImg = glGetUniformLocation(phong_prog, "uImg");
+	GLuint uTexDif = glGetUniformLocation(phong_prog, "uTexDif");
+	GLuint uTexCld = glGetUniformLocation(phong_prog, "uTexCld");
+	GLuint uTexLgt = glGetUniformLocation(phong_prog, "uTexLgt");
+	GLuint uTexSpc = glGetUniformLocation(phong_prog, "uTexSpc");
 
 
 	glUniformMatrix4fv(uModelMat, 1, true, ModelMat);
@@ -168,7 +194,10 @@ void display()
 	glUniform1f(uShininess, mShiny);
 
 	glUniform1f(uTime, g_Time);
-	glUniform1f(uImg, 0);
+	glUniform1i(uTexDif, 0);
+	glUniform1i(uTexCld, 1);
+	glUniform1i(uTexLgt, 2);
+	glUniform1i(uTexSpc, 3);
 
 	sphere.Draw(phong_prog);
 
