@@ -15,20 +15,38 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MySphere.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Targa.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="fPhong.glsl">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="fshader.glsl">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="vcube.glsl">
       <Filter>리소스 파일</Filter>
     </None>
     <None Include="vPhong.glsl">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="vshader.glsl">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="fcube.glsl">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MyCube.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MySphere.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTorus.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Targa.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

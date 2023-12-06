@@ -8,7 +8,6 @@ struct MySphereVertex
 	vec4 position;
 	vec4 color;
 	vec3 normal;
-	vec2 texCoord;
 };
 
 class MySphere
@@ -19,8 +18,8 @@ public:
 
 	int NumVertices;
 
-	MySphereVertex* Vertices;
-	GLuint Init(int la_slice, int lo_slice, vec4 color = vec4(0.5, 0.5, 0.5, 1));
+	MySphereVertex * Vertices;
+	GLuint Init(int la_slice, int lo_slice, vec4 color=vec4(0.5,0.5,0.5,1));
 	void SetPositionAndOtherAttributes(GLuint program);
 
 	GLuint vao;
@@ -41,56 +40,50 @@ MySphere::MySphere(void)
 
 MySphere::~MySphere(void)
 {
-	if (Vertices != NULL)
-		delete[] Vertices;
+	if(Vertices != NULL) 
+		delete [] Vertices;
 }
 
 GLuint MySphere::Init(int la_slice, int lo_slice, vec4 color)
 {
 	// The Cube should be initialized only once;
-	if (bInitialized == true) return vao;
+	if(bInitialized == true) return vao;
 
-	NumVertices = (la_slice - 2) * lo_slice * 2 * 3 + 2 * lo_slice * 3;
-	Vertices = new MySphereVertex[NumVertices];
+	NumVertices = (la_slice-2)*lo_slice*2*3 + 2*lo_slice*3;
+	Vertices = new MySphereVertex [NumVertices];
 
-	float da = 3.141592 / la_slice;
-	float db = 3.141592 * 2.0 / lo_slice;
+	float da = 3.141592/la_slice;
+	float db = 3.141592*2.0/lo_slice;
 	int cur = 0;
-	for (int j = 0; j < lo_slice; j++)
+	for(int j=0; j<lo_slice; j++)
 	{
 		float y2 = cos(da);
-		float r2 = sqrt(1 - y2 * y2);
+		float r2 = sqrt(1-y2*y2);
 	}
-	for (int i = 0; i < la_slice; i++)
+	for(int i=0; i<la_slice; i++)
 	{
-		float y1 = cos(da * i);
-		float r1 = sqrt(1 - y1 * y1);
-		float y2 = cos(da * (i + 1));
-		float r2 = sqrt(1 - y2 * y2);
-		for (int j = 0; j < lo_slice; j++)
+		float y1 = cos(da*i);
+		float r1 = sqrt(1-y1*y1);
+		float y2 = cos(da*(i+1));
+		float r2 = sqrt(1-y2*y2);
+		for(int j=0; j<lo_slice; j++)
 		{
-			vec3 a(r1 * cos(db * j), y1, r1 * sin(db * j));
-			vec3 b(r2 * cos(db * j), y2, r2 * sin(db * j));
-			vec3 c(r2 * cos(db * (j + 1)), y2, r2 * sin(db * (j + 1)));
-			vec3 d(r1 * cos(db * (j + 1)), y1, r1 * sin(db * (j + 1)));
-
-			vec2 ta = vec2(1 - (float)j / lo_slice, 1 - (float)i / la_slice);
-			vec2 tb = vec2(1 - (float)j / lo_slice, 1 - (float)(i + 1) / la_slice);
-			vec2 tc = vec2(1 - (float)(j + 1) / lo_slice, 1 - (float)(i + 1) / la_slice);
-			vec2 td = vec2(1 - (float)(j + 1) / lo_slice, 1 - (float)i / la_slice);
-
-
-			if (i != lo_slice - 1)
+			vec3 a(r1*cos(db*j), y1, r1*sin(db*j));
+			vec3 b(r2*cos(db*j), y2, r2*sin(db*j));
+			vec3 c(r2*cos(db*(j+1)), y2, r2*sin(db*(j+1)));
+			vec3 d(r1*cos(db*(j+1)), y1, r1*sin(db*(j+1)));
+			
+			if(i!=lo_slice-1)
 			{
-				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = a; Vertices[cur].texCoord = ta; cur++;
-				Vertices[cur].position = b;	Vertices[cur].color = color; Vertices[cur].normal = b; Vertices[cur].texCoord = tb; cur++;
-				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = c; Vertices[cur].texCoord = tc; cur++;
+				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = a; cur ++;
+				Vertices[cur].position = b;	Vertices[cur].color = color; Vertices[cur].normal = b; cur ++;
+				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = c; cur ++;
 			}
-			if (i != 0)
+			if(i!=0)
 			{
-				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = c; Vertices[cur].texCoord = tc; cur++;
-				Vertices[cur].position = d;	Vertices[cur].color = color; Vertices[cur].normal = d; Vertices[cur].texCoord = td; cur++;
-				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = a; Vertices[cur].texCoord = ta; cur++;
+				Vertices[cur].position = c;	Vertices[cur].color = color; Vertices[cur].normal = c; cur ++;
+				Vertices[cur].position = d;	Vertices[cur].color = color; Vertices[cur].normal = d; cur ++;
+				Vertices[cur].position = a;	Vertices[cur].color = color; Vertices[cur].normal = a; cur ++;
 			}
 		}
 	}
@@ -100,8 +93,8 @@ GLuint MySphere::Init(int la_slice, int lo_slice, vec4 color)
 
 	glGenBuffers(1, &buffer);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(MySphereVertex) * NumVertices, Vertices, GL_STATIC_DRAW);
-
+	glBufferData(GL_ARRAY_BUFFER, sizeof(MySphereVertex)*NumVertices, Vertices, GL_STATIC_DRAW);
+	
 	bInitialized = true;
 	return vao;
 }
@@ -118,23 +111,18 @@ void MySphere::SetPositionAndOtherAttributes(GLuint program)
 
 	GLuint vNormal = glGetAttribLocation(program, "vNormal");
 	glEnableVertexAttribArray(vNormal);
-	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, sizeof(MySphereVertex), BUFFER_OFFSET(sizeof(vec4) + sizeof(vec4)));
-
-	GLuint vTexCoord = glGetAttribLocation(program, "vTexCoord");
-	glEnableVertexAttribArray(vTexCoord);
-	glVertexAttribPointer(vTexCoord, 2, GL_FLOAT, GL_FALSE, sizeof(MySphereVertex), BUFFER_OFFSET(sizeof(vec4) + sizeof(vec4) + sizeof(vec3)));
-
-
+	glVertexAttribPointer(vNormal, 4, GL_FLOAT, GL_FALSE, sizeof(MySphereVertex), BUFFER_OFFSET(sizeof(vec4)+sizeof(vec4)));
+	
 }
 
 
 void MySphere::Draw(GLuint program)
 {
-	if (!bInitialized) return;			// check whether it is initiazed or not. 
-
+	if(!bInitialized) return;			// check whether it is initiazed or not. 
+	
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 	SetPositionAndOtherAttributes(program);
-
+	
 	glDrawArrays(GL_TRIANGLES, 0, NumVertices);
 }
