@@ -1,441 +1,244 @@
-
-#define _CRT_SECURE_NO_WARNINGS
-
 #include <vgl.h>
 #include <InitShader.h>
 #include "MyCube.h"
-#include "MyUtil.h"
+#include "MySphere.h"
 
 #include <vec.h>
 #include <mat.h>
 
-#define MAZE_FILE	"maze.txt"
-
-#include <iostream>
-#include <queue>
-#include <vector>
-
 MyCube cube;
-GLuint program;
+MyObject sphere;
 
-mat4 g_Mat = mat4(1.0f);
+GLuint program;
+GLuint prog_phong;
+
 GLuint uMat;
 GLuint uColor;
+mat4 g_Mat = mat4(1.0f);
 
-float wWidth = 1000;
-float wHeight = 500;
+int winWidth = 500;
+int winHeight = 500;
 
-vec3 cameraPos = vec3(0, 0, 0);
-vec3 viewDirection = vec3(0, 0, -1);
-std::pair<int, int> camera_idx;
-
-vec3 goalPos = vec3(0, 0, 0);
-std::pair<int, int> goal_idx;
-
-int MazeSize;
-char maze[255][255] = { 0 };
-
-float cameraSpeed = 0.1;
-
-int cameraRotateSpeed = 5;
-//int cameraAngle = 0;
-
-float g_time = 0;
-
-bool isWall = false;
-bool isHint = false;
-bool isTrace = false;
-std::vector<vec3> traceLine;
-std::vector<vec3>::iterator nextPos;
-
-struct Node
+mat4 myLookAt(vec3 eye, vec3 at, vec3 up)
 {
-	int x, z, g, h;
+	// Implement your own look-at function
+	mat4 V(1.0f);
+	vec3 n = at-eye;
+	n /= length(n);
 
-	Node(int x, int z, int g, int h) : x(x), z(z), g(g), h(h) {}
+	float a = dot(up, n);
+	vec3 v = up - a*n;
+	v /= length(v);
 
-	bool operator<(const Node& other) const
-	{
-		return (g + h) > (other.g + other.h);
-	}
-};
+	vec3 w = cross(n, v);
 
-inline vec3 getPositionFromIndex(int i, int j)
-{
-	float unit = 1;
-	vec3 leftTopPosition = vec3(-MazeSize / 2.0 + unit / 2, 0, -MazeSize / 2.0 + unit / 2);
-	vec3 xDir = vec3(1, 0, 0);
-	vec3 zDir = vec3(0, 0, 1);
-	return leftTopPosition + i * xDir + j * zDir;
-}
+	mat4 Rw(1.0f);
 
-inline void getCameraIndex()
-{
-	camera_idx.first = (cameraPos.x + MazeSize / 2) / 1;
-	camera_idx.second = (cameraPos.z + MazeSize / 2) / 1;
-}
+	Rw[0][0] = w.x;	Rw[0][1] = v.x; Rw[0][2] = -n.x;
+	Rw[1][0] = w.y;	Rw[1][1] = v.y; Rw[1][2] = -n.y;
+	Rw[2][0] = w.z;	Rw[2][1] = v.z; Rw[2][2] = -n.z;
 
-void AStar()
-{
-	bool visited[255][255] = { false, };
-	std::pair<int, int> prev[255][255];
-	std::priority_queue<Node> pq;
-	traceLine.clear();
+	mat4 Rc(1.0f);
+	for(int i=0; i<4; i++)
+		for(int j=0; j<4; j++)
+			Rc[i][j] = Rw[j][i];
 
-	pq.push(Node(camera_idx.first, camera_idx.second, 0, 0));
-	prev[camera_idx.first][camera_idx.second] = std::make_pair(-1, -1);
-	
-	while (!pq.empty())
-	{
-		Node cur = pq.top();
-		pq.pop();
+	mat4 Tc = Translate(-eye.x, -eye.y, -eye.z);
 
-		if (cur.x == goal_idx.first && cur.z == goal_idx.second)
-		{
-			int x = goal_idx.first;
-			int z = goal_idx.second;
-
-			while(prev[x][z].first != -1)
-			{
-				traceLine.push_back(getPositionFromIndex(x, z));
-				int tmp = x;
-				x = prev[tmp][z].first;
-				z = prev[tmp][z].second;
-			}
-
-			traceLine.push_back(getPositionFromIndex(x, z));
-			reverse(traceLine.begin(), traceLine.end());
-			return;
-		}
-
-		visited[cur.x][cur.z] = true;
+	V = Rc*Tc;
 		
-		int dir[4][2] = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
-		for (int i = 0; i < 4; i++)
-		{
-			int nextX = cur.x + dir[i][0];
-			int nextZ = cur.z + dir[i][1];
-
-			if (maze[nextX][nextZ] != '*' && !visited[nextX][nextZ])
-			{
-				int nextG = cur.g + 1;
-				int nextH = sqrt(pow(nextX - goal_idx.first, 2) + pow(nextZ - goal_idx.second, 2));
-				
-				pq.push(Node(nextX, nextZ, nextG, nextH));
-
-				prev[nextX][nextZ] = std::make_pair(cur.x, cur.z);
-			}
-		}
-	}
+	return V;
 }
 
-void LoadMaze()
+mat4 myOrtho(float l, float r, float b, float t, float zNear, float zFar)
 {
-	FILE* file = fopen(MAZE_FILE, "r");
-	char buf[255];
-	fgets(buf, 255, file);
-	sscanf(buf, "%d", &MazeSize);
-	for (int j = 0; j < MazeSize; j++)
-	{
-		fgets(buf, 255, file);
-		for (int i = 0; i < MazeSize; i++)
-		{
-			maze[i][j] = buf[i];
-			if (maze[i][j] == 'C')				// Setup Camera Position
-			{				
-				cameraPos = getPositionFromIndex(i, j);
-				camera_idx.first = i;
-				camera_idx.second = j;
-			}
-			if (maze[i][j] == 'G')				// Setup Goal Position
-			{
-				goalPos = getPositionFromIndex(i, j);
-				goal_idx.first = i;
-				goal_idx.second = j;
-			}
-		}
-	}
-	fclose(file);
+	// Implement your own Ortho function
+	mat4 V(1.0f);
+
+	V[0][0] = 2/(r-l);
+	V[1][1] = 2/(t-b);
+	V[2][2] = 2/(zFar-zNear);
+	V[0][3] = -(r+l)/(r-l);
+	V[1][3] = -(t+b)/(t-b);
+	V[2][3] = (zNear)/(zFar-zNear);
+
+	return V;
 }
 
-void DrawMaze()
+mat4 myPerspective(float fovy, float aspectRatio, float zNear, float zFar)
 {
-	for (int j = 0; j < MazeSize; j++)
-		for (int i = 0; i < MazeSize; i++)
-			if (maze[i][j] == '*')
-			{
-				vec3 blockPos = getPositionFromIndex(i, j);
-				vec3 color;
+	mat4 P(1.0f);
+	
+	float rad = fovy * 3.141592 / 180.0;
+	
+	float sz = 1 / zFar;
+	float h = zFar * tan(rad/2);
+	
+	float sy = 1/h;
+	float w = h*aspectRatio;
+	float sx = 1/w;
 
-				if (length(blockPos - cameraPos) < 0.8)
-				{
-					isWall = true;
-					cameraPos -= (blockPos - cameraPos) * cameraSpeed;
-					color = vec3(255, 0, 0);					
-				}
+	mat4 S = Scale(sx, sy, sz);
+	mat4 M(1.0f);
 
-				else
-				{
-					isWall = false;
-					color = vec3(i / (float)MazeSize, j / (float)MazeSize, 1);
-				}
+	float c = -zNear / zFar;
+	M[2][2] = 1/(c+1);
+	M[2][3] = -c/(c+1);
+	M[3][2] = -1;
+	M[3][3] = 0;
 
-				mat4 ModelMat = Translate(blockPos);
-				glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
-				glUniform4f(uColor, color.x, color.y, color.z, 1);
-				cube.Draw(program);
-			}
+	P = M*S;
+
+	return P;
 }
 
 void myInit()
 {
-	LoadMaze();
 	cube.Init();
+	sphere.Init(20, 20);
+
 	program = InitShader("vshader.glsl", "fshader.glsl");
+	prog_phong = InitShader("vphong.glsl", "fphong.glsl");
+}
+
+void DrawAxis()
+{
+	glUseProgram(program);
+	mat4 x_a= Translate(0.5,0,0)*Scale(1,0.05,0.05);
+	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat*x_a);
+	glUniform4f(uColor, 1, 0, 0, 1);
+	cube.Draw(program);
+
+	mat4 y_a= Translate(0,0.5,0)*Scale(0.05,1,0.05);
+	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat*y_a);
+	glUniform4f(uColor, 0, 1, 0, 1);
+	cube.Draw(program);
+
+	mat4 z_a= Translate(0,0,0.5)*Scale(0.05,0.05,1);
+	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat*z_a);
+	glUniform4f(uColor, 0, 0, 1, 1);
+	cube.Draw(program);
 }
 
 void DrawGrid()
 {
+	glUseProgram(program);
 	float n = 40;
-	float w = MazeSize;
-	float h = MazeSize;
+	float w = 10;
+	float h = 10;
 
-	for (int i = 0; i < n; i++)
+	for(int i=0; i<n; i++)
 	{
-		mat4 m = Translate(0, -0.5, -h / 2 + h / n * i) * Scale(w, 0.02, 0.02);
-		glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * m);
+		mat4 m = Translate(0,-0.5,-h+2*h/n*i)*Scale(w*2,0.02,0.02);
+		glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat*m);
 		glUniform4f(uColor, 1, 1, 1, 1);
 		cube.Draw(program);
 	}
-	for (int i = 0; i < n; i++)
+	for(int i=0; i<n; i++)
 	{
-		mat4 m = Translate(-w / 2 + w / n * i, -0.5, 0) * Scale(0.02, 0.02, h);
-		glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * m);
+		mat4 m = Translate(-w+2*w/n*i,-0.5,0)*Scale(0.02,0.02,h*2);
+		glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat*m);
 		glUniform4f(uColor, 1, 1, 1, 1);
 		cube.Draw(program);
 	}
-
-	if (isHint && !traceLine.empty())
-	{
-		for (int i = 0; i < traceLine.size() - 1; i++)
-		{
-			vec3 prev = traceLine[i];
-			vec3 next = traceLine[i + 1];
-			mat4 m;
-			if(prev.x == next.x) m = Translate(0, -0.5, 0) * Translate((prev + next) / 2) * Scale(0.1, 0.05, h / n * 4 / (h / 10));
-			else m = Translate(0, -0.5, 0) * Translate((prev + next) / 2) * Scale(w / n * 4 / (w / 10), 0.05, 0.1);
-			glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * m);
-			glUniform4f(uColor, abs(sin(g_time* 0.05 + i * 3)), 0, 0, 1);
-			cube.Draw(program);
-		}
-	}
 }
 
-void drawCamera()
-{
-	float cameraSize = 0.5;
-	float cameraAngle = acos(dot(viewDirection, vec3(0, 0, -1))) * 180  / 3.141592;
-	if(cross(viewDirection, vec3(0, 0, -1)).y > 0) cameraAngle = -cameraAngle;
-
-	mat4 ModelMat = Translate(cameraPos) * RotateY(cameraAngle) * Scale(vec3(cameraSize));
-	glUseProgram(program);
-	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
-	glUniform4f(uColor, 0, 1, 0, 1);
-	cube.Draw(program);
-	
-	ModelMat = Translate(cameraPos + viewDirection * cameraSize / 2) * RotateY(cameraAngle) * Scale(vec3(cameraSize / 2));
-	glUseProgram(program);
-	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
-	glUniform4f(uColor, 0, 1, 0, 1);
-	cube.Draw(program);
-}
-
-void drawGoal()
-{
-	glUseProgram(program);
-	float GoalSize = 0.7;
-
-	mat4 ModelMat = Translate(goalPos) * RotateY(g_time * 3) * Scale(vec3(GoalSize));
-	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
-	glUniform4f(uColor, 0, 0, 0, 0);
-	cube.Draw(program);
-
-	ModelMat = Translate(goalPos) * RotateY(g_time * 3 + 45) * Scale(vec3(GoalSize));
-	glUniformMatrix4fv(uMat, 1, GL_TRUE, g_Mat * ModelMat);
-	glUniform4f(uColor, 0, 0, 0, 0);
-	cube.Draw(program);
-}
-
-
-void drawScene(bool bDrawCamera = true)
-{
-	glUseProgram(program);
-	uMat = glGetUniformLocation(program, "uMat");
-	uColor = glGetUniformLocation(program, "uColor");
-
-	DrawGrid();
-	DrawMaze();
-	drawGoal();
-
-	if (bDrawCamera)
-		drawCamera();
-
-
-
-}
+float g_Time = 0;
 
 void display()
 {
 	glEnable(GL_DEPTH_TEST);
+	glClear(GL_DEPTH_BUFFER_BIT|GL_COLOR_BUFFER_BIT);
+		
+	mat4 ViewMat = myLookAt(vec3(2,2,2), vec3(0,0,0), vec3(0,1,0));
 
-	float vWidth = wWidth / 2;
-	float vHeight = wHeight;
+	float aspect = winWidth/(float)winHeight;
+	float h = 1;
+	
+	//mat4 ProjMat = myOrtho(-h*aspect,h*aspect,-h,h,0,100);
+	mat4 ProjMat = myPerspective(40, aspect,0.1,100);
 
-	// LEFT SCREEN : View From Camera (Perspective Projection)
-	glViewport(0, 0, vWidth, vHeight);
-	glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+	g_Mat = ProjMat*ViewMat;
+	
+	glUseProgram(program);
+	uMat = glGetUniformLocation(program, "uMat");
+	uColor = glGetUniformLocation(program, "uColor");
 
-	float h = 4;
-	float aspectRatio = vWidth / vHeight;
-	float w = aspectRatio * h;
-	mat4 ViewMat = myLookAt(cameraPos, cameraPos + viewDirection, vec3(0, 1, 0));
-	mat4 ProjMat = myPerspective(45, aspectRatio, 0.01, 20);
+	DrawAxis();
+	DrawGrid();
 
-	g_Mat = ProjMat * ViewMat;
-	drawScene(false);							// drawing scene except the camera
+	glUseProgram(prog_phong);
+	GLuint uProjMat = glGetUniformLocation(prog_phong, "uProjMat");
+	GLuint uModelMat = glGetUniformLocation(prog_phong, "uModelMat");
+
+	mat4 ModelMat = RotateY(g_Time*90);
+	glUniformMatrix4fv(uProjMat, 1, GL_TRUE, ProjMat);
+	glUniformMatrix4fv(uModelMat, 1, GL_TRUE, ViewMat * ModelMat);
+	
+	//vec4 LPos = vec4(2*sin(g_Time*3.14/2), 2, -2+2*cos(g_Time * 3.14 / 2), 1);
+	vec4 LPos = vec4(2, 2, 0, 1);
+	vec4 LCol = vec4(1, 1, 1, 1);
+	vec4 KAmb = vec4(0.1, 0.1, 0.2, 1);
+	vec4 KDif = vec4(1.0, 0.8, 0.5, 1);
+	vec4 KSpc = vec4(0.3, 0.3, 0.3, 1);
+	float Shine = 50;
+	
+	GLuint uLPos = glGetUniformLocation(prog_phong, "uLPos");
+	GLuint uLCol = glGetUniformLocation(prog_phong, "uLCol");
+	GLuint uKAmb = glGetUniformLocation(prog_phong, "uKAmb");
+	GLuint uKDif = glGetUniformLocation(prog_phong, "uKDif");
+	GLuint uKSpc = glGetUniformLocation(prog_phong, "uKSpc");
+	GLuint uShine = glGetUniformLocation(prog_phong, "uShine");
+
+	glUniform4f(uLPos, LPos[0], LPos[1], LPos[2], LPos[3]);
+	glUniform4f(uLCol, LCol[0], LCol[1], LCol[2], LCol[3]);
+	glUniform4f(uKAmb, KAmb[0], KAmb[1], KAmb[2], KAmb[3]);
+	glUniform4f(uKDif, KDif[0], KDif[1], KDif[2], KDif[3]);
+	glUniform4f(uKSpc, KSpc[0], KSpc[1], KSpc[2], KSpc[3]);
+	glUniform1f(uShine, Shine);
 
 
-	// RIGHT SCREEN : View from above (Orthographic parallel projection)
-	glViewport(vWidth, 0, vWidth, vHeight);
-	h = MazeSize;
-	w = aspectRatio * h;
-	ViewMat = myLookAt(vec3(0, 5, 0), vec3(0, 0, 0), vec3(0, 0, -1));
-	ProjMat = myOrtho(-w / 2, w / 2, -h / 2, h / 2, 0, 20);
-
-	g_Mat = ProjMat * ViewMat;
-	drawScene(true);
-
-
+	//cube.Draw(prog_phong);
+	sphere.Draw(prog_phong);
+	
 	glutSwapBuffers();
 }
 
+
 void idle()
 {
-	g_time += 1;
-
-	if (!isTrace)
-	{
-		if ((GetAsyncKeyState('A') & 0x8000) == 0x8000)		// if "A" key is pressed	: Go Left
-		{
-			vec4 rotateM = RotateY(cameraRotateSpeed) * viewDirection;
-			viewDirection.x = rotateM.x;
-			viewDirection.z = rotateM.z;
-		}
-		if ((GetAsyncKeyState('D') & 0x8000) == 0x8000)		// if "D" key is pressed	: Go Right
-		{
-			vec4 rotateM = RotateY(-cameraRotateSpeed) * viewDirection;
-			viewDirection.x = rotateM.x;
-			viewDirection.z = rotateM.z;
-		}
-		if ((GetAsyncKeyState('W') & 0x8000) == 0x8000 && !isWall)		// if "W" key is pressed	: Go Forward
-		{
-			cameraPos += cameraSpeed * viewDirection;
-			getCameraIndex();
-		}
-		if ((GetAsyncKeyState('S') & 0x8000) == 0x8000 && !isWall)		// if "S" key is pressed	: Go Backward
-		{
-			cameraPos += cameraSpeed * -viewDirection;
-			getCameraIndex();
-		}
-	}
-
-	else
-	{
-		if (length(cameraPos - goalPos) >= cameraSpeed)
-		{
-			if (length(*nextPos - cameraPos) < 0.01f && nextPos != traceLine.end() - 1)
-			{
-				++nextPos;
-			}
-
-			if (abs(dot(viewDirection, normalize(*nextPos - cameraPos)) - 1) < 0.01f)
-			{
-				viewDirection = normalize(*nextPos - cameraPos);
-				cameraPos += cameraSpeed * viewDirection;				
-			}
-
-			else
-			{
-				if (cross(*nextPos - cameraPos, viewDirection).y < 0)
-				{
-					vec4 rotateM = RotateY(cameraRotateSpeed) * viewDirection;
-					viewDirection.x = rotateM.x;
-					viewDirection.z = rotateM.z;
-				}
-				else if (cross(*nextPos - cameraPos, viewDirection).y > 0)
-				{
-					vec4 rotateM = RotateY(-cameraRotateSpeed) * viewDirection;
-					viewDirection.x = rotateM.x;
-					viewDirection.z = rotateM.z;
-				}
-			}
-		}
-		else isTrace = !isTrace;
-	}
-
-	Sleep(16);											// for vSync
+	g_Time += 0.016;
+	Sleep(16);					// for vSync
 	glutPostRedisplay();
 }
 
-void myKeyboard(unsigned char c, int x, int  y)
+void reshape(int w, int h)
 {
-	if (c == 'q')
-	{
-		AStar();
-		isHint = !isHint;
-		if (isTrace) isTrace = !isTrace;
-		getCameraIndex();
-		glutPostRedisplay();
-	}
-
-	else if (c == ' ' && isHint)
-	{
-		cameraPos = traceLine[0];		
-		nextPos = traceLine.begin() + 1;
-		viewDirection = normalize(*nextPos - cameraPos);
-		isTrace = !isTrace;
-		glutPostRedisplay();
-	}
-}
-
-void reshape(int wx, int wy)
-{
-	printf("%d %d \n", wx, wy);
-	wWidth = wx;
-	wHeight = wy;
+	winWidth = w;
+	winHeight = h;
+	glViewport(0,0,w,h);
 	glutPostRedisplay();
 }
 
 
-int main(int argc, char** argv)
+int main(int argc, char ** argv)
 {
 	glutInit(&argc, argv);
 
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitWindowSize(wWidth, wHeight);
+	glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA|GLUT_DEPTH);
+	glutInitWindowSize(winWidth,winHeight);
 
-	glutCreateWindow("Homework3 (Maze Navigator)");
+	glutCreateWindow("OpenGL");
 
 	glewExperimental = true;
 	glewInit();
 
-	printf("OpenGL %s, GLSL %s\n", glGetString(GL_VERSION),
-		glGetString(GL_SHADING_LANGUAGE_VERSION));
-
+	printf("OpenGL %s, GLSL %s\n",	glGetString(GL_VERSION),
+									glGetString(GL_SHADING_LANGUAGE_VERSION));
+		
 	myInit();
 	glutDisplayFunc(display);
 	glutIdleFunc(idle);
-	glutKeyboardFunc(myKeyboard);
 	glutReshapeFunc(reshape);
 	glutMainLoop();
 

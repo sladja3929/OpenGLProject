@@ -7,6 +7,7 @@ struct MyCubeVertex
 {
 	vec4 position;
 	vec4 color;
+	vec3 normal;
 };
 
 class MyCube
@@ -21,9 +22,9 @@ public:
 	GLuint Init();
 	void SetPositionAndColorAttribute(GLuint program);
 
-
 	void ColorCube(vec4 * vin, vec4 * cin);
 	void Quad (int a, int b, int c, int d, vec4 * vin, vec4 * cin);
+	vec3 getNormal(vec4 a, vec4 b, vec4 c);
 
 	int NumCurVertices;
 
@@ -46,22 +47,42 @@ MyCube::~MyCube(void)
 {
 }
 
+vec3 MyCube::getNormal(vec4 a, vec4 b, vec4 c)
+{
+	vec3 p0(a.x, a.y, a.z);
+	vec3 p1(b.x, b.y, b.z);
+	vec3 p2(c.x, c.y, c.z);
+
+	vec3 p = p1-p0;
+	vec3 q = p2-p0;
+	vec3 n = cross(p, q);
+	n = normalize(n);
+	return n;
+}
+
 void MyCube::Quad (int a, int b, int c, int d, vec4 * vin, vec4 * cin)
 {
-	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a]; 
+	vec3 n = getNormal(vin[a],vin[b],vin[c]);
+	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a];
+	Vertices[NumCurVertices].normal = n;
 	NumCurVertices++;
 	Vertices[NumCurVertices].position = vin[b]; Vertices[NumCurVertices].color = cin[b]; 
+	Vertices[NumCurVertices].normal = n;
 	NumCurVertices++;
 	Vertices[NumCurVertices].position = vin[c]; Vertices[NumCurVertices].color = cin[c]; 
-	NumCurVertices++;
-	
-	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a]; 
-	NumCurVertices++;
-	Vertices[NumCurVertices].position = vin[c]; Vertices[NumCurVertices].color = cin[c]; 
-	NumCurVertices++;
-	Vertices[NumCurVertices].position = vin[d]; Vertices[NumCurVertices].color = cin[d]; 
+	Vertices[NumCurVertices].normal = n;
 	NumCurVertices++;
 
+	n = getNormal(vin[a],vin[c],vin[d]);
+	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a]; 
+	Vertices[NumCurVertices].normal = n;
+	NumCurVertices++;
+	Vertices[NumCurVertices].position = vin[c]; Vertices[NumCurVertices].color = cin[c]; 
+	Vertices[NumCurVertices].normal = n;
+	NumCurVertices++;
+	Vertices[NumCurVertices].position = vin[d]; Vertices[NumCurVertices].color = cin[d]; 
+	Vertices[NumCurVertices].normal = n;
+	NumCurVertices++;
 }
 
 void MyCube::ColorCube(vec4 * vin, vec4 * cin)
@@ -124,6 +145,11 @@ void MyCube::SetPositionAndColorAttribute(GLuint program)
 	GLuint vColor = glGetAttribLocation(program, "vColor");
 	glEnableVertexAttribArray(vColor);
 	glVertexAttribPointer(vColor, 4, GL_FLOAT, GL_FALSE, sizeof(MyCubeVertex), BUFFER_OFFSET(sizeof(vec4)));
+
+	GLuint vNormal = glGetAttribLocation(program, "vNormal");
+	glEnableVertexAttribArray(vNormal);
+	glVertexAttribPointer(vNormal, 3, GL_FLOAT, GL_FALSE, sizeof(MyCubeVertex), BUFFER_OFFSET(sizeof(vec4)+sizeof(vec4)));
+
 }
 
 

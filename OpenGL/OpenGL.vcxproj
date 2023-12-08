@@ -19,19 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="fshader.glsl" />
-    <None Include="vshader.glsl" />
+    <None Include="fphong.glsl" />
+    <None Include="vphong.glsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="maze.txt" />
-    <Text Include="maze2.txt" />
+    <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyCube.h" />
-    <ClInclude Include="MyUtil.h" />
+    <ClInclude Include="MySphere.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
