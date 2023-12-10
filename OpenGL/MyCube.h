@@ -64,24 +64,24 @@ void MyCube::Quad (int a, int b, int c, int d, vec4 * vin, vec4 * cin)
 {
 	vec3 n = getNormal(vin[a],vin[b],vin[c]);
 	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a];
-	Vertices[NumCurVertices].normal = n;
+	Vertices[NumCurVertices].normal = normalize(vec3(vin[a].x, vin[a].y, vin[a].z));
 	NumCurVertices++;
 	Vertices[NumCurVertices].position = vin[b]; Vertices[NumCurVertices].color = cin[b]; 
-	Vertices[NumCurVertices].normal = n;
+	Vertices[NumCurVertices].normal = normalize(vec3(vin[b].x, vin[b].y, vin[b].z));
 	NumCurVertices++;
 	Vertices[NumCurVertices].position = vin[c]; Vertices[NumCurVertices].color = cin[c]; 
-	Vertices[NumCurVertices].normal = n;
+	Vertices[NumCurVertices].normal = normalize(vec3(vin[c].x, vin[c].y, vin[c].z));
 	NumCurVertices++;
 
 	n = getNormal(vin[a],vin[c],vin[d]);
 	Vertices[NumCurVertices].position = vin[a]; Vertices[NumCurVertices].color = cin[a]; 
-	Vertices[NumCurVertices].normal = n;
+	Vertices[NumCurVertices].normal = normalize(vec3(vin[a].x, vin[a].y, vin[a].z));
 	NumCurVertices++;
 	Vertices[NumCurVertices].position = vin[c]; Vertices[NumCurVertices].color = cin[c]; 
-	Vertices[NumCurVertices].normal = n;
+	Vertices[NumCurVertices].normal = normalize(vec3(vin[c].x, vin[c].y, vin[c].z));
 	NumCurVertices++;
 	Vertices[NumCurVertices].position = vin[d]; Vertices[NumCurVertices].color = cin[d]; 
-	Vertices[NumCurVertices].normal = n;
+	Vertices[NumCurVertices].normal = normalize(vec3(vin[d].x, vin[d].y, vin[d].z));
 	NumCurVertices++;
 }
 

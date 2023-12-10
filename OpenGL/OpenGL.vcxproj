@@ -20,14 +20,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="fphong.glsl" />
+    <None Include="fshader.glsl" />
     <None Include="vphong.glsl" />
+    <None Include="vshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyCube.h" />
-    <ClInclude Include="MySphere.h" />
+    <ClInclude Include="MyObject.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
