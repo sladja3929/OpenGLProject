@@ -1,16 +1,17 @@
 #version 330
 
 in  vec4 color;
-in vec4 position;
+in  vec3 pos;
+in vec3 wV;
+in vec3 wP;
+
 out vec4 fColor;
 
-uniform samplerCube uCubeTex;
+uniform samplerCube uCube;
 
 void
 main()
 {
-	vec3 dir = position.xyz;
-	dir.y = -dir.y;
-	fColor = color;
-	fColor = texture(uCubeTex, dir);
+	vec3 viewDir = wP - wV;
+	fColor = texture(uCube, vec3(1,-1,1)*viewDir);
 }

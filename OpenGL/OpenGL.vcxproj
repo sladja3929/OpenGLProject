@@ -21,18 +21,23 @@
   <ItemGroup>
     <None Include="fcube.glsl" />
     <None Include="fPhong.glsl" />
-    <None Include="fshader.glsl" />
     <None Include="vcube.glsl" />
     <None Include="vPhong.glsl" />
-    <None Include="vshader.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="museum_negx.tga" />
+    <Image Include="museum_negy.tga" />
+    <Image Include="museum_negz.tga" />
+    <Image Include="museum_posx.tga" />
+    <Image Include="museum_posy.tga" />
+    <Image Include="museum_posz.tga" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="MyCube.h" />
     <ClInclude Include="MySphere.h" />
-    <ClInclude Include="MyTorus.h" />
     <ClInclude Include="Targa.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
