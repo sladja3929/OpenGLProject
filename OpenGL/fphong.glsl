@@ -57,7 +57,6 @@ bool IntersectRay( inout HitInfo hit, Ray ray );
 vec4 Shade( Material mtl, vec4 position, vec3 normal, vec3 view, bool isFirst )
 {
 	vec4 color = vec4(0,0,0,1);
-	// TO-DO: Check for shadows
 	vec3 L = normalize(uLPos.xyz - position.xyz);
 	Ray sRay;
 	sRay.pos = position.xyz;
@@ -71,13 +70,12 @@ vec4 Shade( Material mtl, vec4 position, vec3 normal, vec3 view, bool isFirst )
 	}
 
 	float NL = max(dot(normal, L), 0.0);
-	// TO-DO: If not shadowed, perform shading using the diffuse color only
 	if (!isFirst) {
 		color = uLIntensity * mtl.k_d * NL;
 		return color;
 	}
 
-	// Ã¹ ¹øÂ° shadeÀÏ °æ¿ì ambient, specular±îÁö °è»ê
+	// ÃƒÂ¹ Â¹Ã¸Ã‚Â° shadeÃ€Ã Â°Ã¦Â¿Ã¬ ambient, specularÂ±Ã®ÃÃ¶ Â°Ã¨Â»Ãª
 	vec3 H = normalize(view + L);		
 	float VR = pow(max(dot(H, normal), 0), mtl.n);
 
@@ -94,7 +92,6 @@ bool IntersectRay( inout HitInfo hit, Ray ray )
 	hit.t = 1e30;
 	bool foundHit = false;
 	for ( int i=0; i<uNumSphere; ++i ) {
-		// TO-DO: Test for ray-sphere intersection
 		vec3 rayToSphere = ray.pos.xyz - uSpheres[i].center.xyz;
 		float a = dot(ray.dir, ray.dir);
 		float b = 2.0 * dot(rayToSphere, ray.dir);
@@ -106,7 +103,6 @@ bool IntersectRay( inout HitInfo hit, Ray ray )
 			float t2 = (-b + sqrt(d)) / (2.0 * a);
 			float t = min(t1, t2);
 
-			// TO-DO: If intersection is found, update the given HitInfo
 			if (t > 0.0 && t < hit.t) {
 				hit.t = t;
 				hit.position.xyz = ray.pos + ray.dir * t;
@@ -138,18 +134,15 @@ vec4 RayTracer( Ray ray )
 			Ray r;	// this is the reflection ray
 			HitInfo h;	// reflection hit info
 						
-			// TO-DO: Initialize the reflection ray
 			r.pos = hit.position.xyz;
 			r.dir = reflect(ray.dir, hit.normal);
 			float rIntensity = pow(0.8, bounce);
 
 			if ( IntersectRay( h, r ) ) {
-				// TO-DO: Hit found, so shade the hit point
 				vec3 view_reflected = normalize(-r.dir);
 				vec4 clr_reflected = Shade(h.mtl, h.position, h.normal, view_reflected, false);
 				clr += k_s * clr_reflected;
 
-				// TO-DO: Update the loop variables for tracing the next reflection ray
 				hit = h;
 				ray = r;
 				k_s = hit.mtl.k_s * rIntensity * 0.2;
