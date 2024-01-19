@@ -2,6 +2,7 @@
 *Sejong Univ. Computer Graphics 2*
 
 개인 OpenGL 공부 프로젝트입니다.
+코드는 각 브랜치에 따로 구현되어 있습니다.
 
 
 ## 기술 스택
