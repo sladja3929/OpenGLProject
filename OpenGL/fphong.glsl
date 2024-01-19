@@ -54,26 +54,34 @@ uniform int uDrawingMode;
 bool IntersectRay( inout HitInfo hit, Ray ray );
 
 // Shades the given point and returns the computed color.
-vec4 Shade( Material mtl, vec4 position, vec3 normal, vec3 view )
+vec4 Shade( Material mtl, vec4 position, vec3 normal, vec3 view, bool isFirst )
 {
 	vec4 color = vec4(0,0,0,1);
 	// TO-DO: Check for shadows
-	vec3 lightDir = L3;//normalize(uLPos.xyz - position.xyz);
-	Ray shadowRay;
-	shadowRay.pos = position.xyz + 0.001 * normal; // Slightly offset to avoid self-shadowing
-	shadowRay.dir = lightDir;
+	vec3 L = normalize(uLPos.xyz - position.xyz);
+	Ray sRay;
+	sRay.pos = position.xyz;
+	sRay.dir = L;
 
-	HitInfo shadowHit;
-	if (IntersectRay(shadowHit, shadowRay))
+	HitInfo sHit;
+	if (IntersectRay(sHit, sRay))
 	{
-		// Point is in shadow, return ambient color only
+		color = uAmb;
 		return color;
 	}
 
+	float NL = max(dot(normal, L), 0.0);
 	// TO-DO: If not shadowed, perform shading using the diffuse color only
-	float diffuse = max(dot(normal, lightDir), 0.0);
-	color += mtl.k_d * uLIntensity * diffuse;
+	if (!isFirst) {
+		color = uLIntensity * mtl.k_d * NL;
+		return color;
+	}
 
+	// 첫 번째 shade일 경우 ambient, specular까지 계산
+	vec3 H = normalize(view + L);		
+	float VR = pow(max(dot(H, normal), 0), mtl.n);
+
+	color = uAmb + uLIntensity * mtl.k_d * NL + uLIntensity * mtl.k_s * VR;
 	return color;
 }
 
@@ -87,17 +95,18 @@ bool IntersectRay( inout HitInfo hit, Ray ray )
 	bool foundHit = false;
 	for ( int i=0; i<uNumSphere; ++i ) {
 		// TO-DO: Test for ray-sphere intersection
-		vec3 oc = ray.pos.xyz - uSpheres[i].center.xyz;
+		vec3 rayToSphere = ray.pos.xyz - uSpheres[i].center.xyz;
 		float a = dot(ray.dir, ray.dir);
-		float b = 2.0 * dot(oc, ray.dir);
-		float c = dot(oc, oc) - uSpheres[i].radius * uSpheres[i].radius;
-		float discriminant = b * b - 4.0 * a * c;
+		float b = 2.0 * dot(rayToSphere, ray.dir);
+		float c = dot(rayToSphere, rayToSphere) - uSpheres[i].radius * uSpheres[i].radius;
+		float d = b * b - 4.0 * a * c;
 
-		if (discriminant > 0.0) {
-			float t1 = (-b - sqrt(discriminant)) / (2.0 * a);
-			float t2 = (-b + sqrt(discriminant)) / (2.0 * a);
+		if (d > 0.0) {
+			float t1 = (-b - sqrt(d)) / (2.0 * a);
+			float t2 = (-b + sqrt(d)) / (2.0 * a);
 			float t = min(t1, t2);
 
+			// TO-DO: If intersection is found, update the given HitInfo
 			if (t > 0.0 && t < hit.t) {
 				hit.t = t;
 				hit.position.xyz = ray.pos + ray.dir * t;
@@ -106,8 +115,7 @@ bool IntersectRay( inout HitInfo hit, Ray ray )
 				hit.mtl = uSpheres[i].mtl;
 				foundHit = true;
 			}
-		}
-		// TO-DO: If intersection is found, update the given HitInfo
+		}		
 	}
 	return foundHit;
 }
@@ -119,7 +127,7 @@ vec4 RayTracer( Ray ray )
 	HitInfo hit;
 	if ( IntersectRay( hit, ray ) ) {
 		vec3 view = normalize( -ray.dir );
-		vec4 clr = Shade( hit.mtl, hit.position, hit.normal, view );
+		vec4 clr = Shade( hit.mtl, hit.position, hit.normal, view, true);
 
 		// Compute reflections
 		vec4 k_s = hit.mtl.k_s;
@@ -131,26 +139,27 @@ vec4 RayTracer( Ray ray )
 			HitInfo h;	// reflection hit info
 						
 			// TO-DO: Initialize the reflection ray
-			r.pos = hit.position.xyz + 0.001 * hit.normal; // Slightly offset the origin to avoid self-intersection
+			r.pos = hit.position.xyz;
 			r.dir = reflect(ray.dir, hit.normal);
+			float rIntensity = pow(0.8, bounce);
 
 			if ( IntersectRay( h, r ) ) {
 				// TO-DO: Hit found, so shade the hit point
 				vec3 view_reflected = normalize(-r.dir);
-				vec4 clr_reflected = Shade(h.mtl, h.position, h.normal, view_reflected);
+				vec4 clr_reflected = Shade(h.mtl, h.position, h.normal, view_reflected, false);
 				clr += k_s * clr_reflected;
 
 				// TO-DO: Update the loop variables for tracing the next reflection ray
 				hit = h;
-				r.pos = hit.position.xyz + 0.001 * hit.normal; // Offset the origin again
-				r.dir = reflect(r.dir, hit.normal);
+				ray = r;
+				k_s = hit.mtl.k_s * rIntensity * 0.2;
 			} 
 			
 			else {
 				// The refleciton ray did not intersect with anything,
 				// so we are using the environment color
 
-				clr += k_s * texture(uCube, vec3(1,-1,1)*r.dir);
+				clr += k_s * texture(uCube, vec3(1, -1, 1) * r.dir);
 				break;	// no more reflections
 			}
 		}
