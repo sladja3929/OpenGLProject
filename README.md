@@ -37,7 +37,7 @@
 ### Object Viewer
 <img width="406" alt="ob" src="https://github.com/sladja3929/OpenGLProject/assets/43125863/dc112236-6e46-4a32-b8fb-9d17c1820b24">
 
-+ Gouraud Shading 사용: 1
++ Flat Shading 사용: 1
 + Phong Shading 사용: 2
 + Specular 증가: 3
 + Specular 감소: 4
