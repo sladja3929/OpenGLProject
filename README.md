@@ -2,6 +2,7 @@
 *Sejong Univ. Computer Graphics 2*
 
 개인 OpenGL 공부 프로젝트입니다.
+코드는 각 브랜치에 따로 구현되어 있습니다.
 
 
 ## 기술 스택
@@ -36,7 +37,7 @@
 ### Object Viewer
 <img width="406" alt="ob" src="https://github.com/sladja3929/OpenGLProject/assets/43125863/dc112236-6e46-4a32-b8fb-9d17c1820b24">
 
-+ Gouraud Shading 사용: 1
++ Flat Shading 사용: 1
 + Phong Shading 사용: 2
 + Specular 증가: 3
 + Specular 감소: 4
@@ -53,3 +54,4 @@
 + Ray Bound 감소: 4
 + 리셋: r
 + 실행: space
+
